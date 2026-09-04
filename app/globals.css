@@ -93,6 +93,7 @@
 .contents>section em{color:var(--navy);font-family:Arial,sans-serif;font-size:.8em;font-style:normal;font-weight:800;text-align:right}
 .story .copy{min-height:0;overflow:visible}
 .story .copy p:last-child{margin-bottom:0}
+.copy .signature{white-space:pre-line;color:var(--navy);font-family:Arial,Helvetica,sans-serif;font-size:.9em;font-weight:700;line-height:1.45;text-align:left}
 .story-gallery{flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3.5%;margin:0 0 3%;padding-bottom:5%}
 .story-gallery figure{position:relative;min-width:0;min-height:0;margin:0;overflow:hidden;border:1px solid rgba(7,45,100,.14);border-radius:2px;background:#f0ece2;box-shadow:0 6px 14px rgba(7,28,54,.13)}
 .story-gallery img{object-fit:cover}
