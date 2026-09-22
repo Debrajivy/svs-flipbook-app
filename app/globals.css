@@ -100,6 +100,12 @@
 .story-gallery.gallery-1{grid-template-columns:1fr;margin-inline:7%}
 .portrait-story .story-gallery figure{border:5px solid #fff;box-shadow:0 8px 22px rgba(7,28,54,.18)}
 .portrait-story .story-gallery img{object-position:center top}
+.opening-portrait .story-gallery{flex:none;width:44%;aspect-ratio:4/5;align-self:center;min-height:0;margin:0 0 3%;padding:0}
+.opening-portrait.portrait-square .story-gallery{aspect-ratio:1}
+.opening-portrait .story-gallery figure{background:#fffdf8}
+.opening-portrait .story-gallery img{object-fit:contain;object-position:center}
+.opening-portrait .copy{flex:none}
+.opening-portrait .copy p{margin-bottom:0}
 .story.empty{justify-content:center}
 .story.empty footer{display:flex}
 .blank-page:after{background:linear-gradient(90deg,rgba(12,26,48,.1),transparent 8%,transparent 92%,rgba(10,20,35,.05))}
@@ -193,3 +199,30 @@
 }
 @keyframes mobile-front-shade{0%{opacity:0}38%{opacity:.25}49%{opacity:1}51%,100%{opacity:0}}
 @keyframes mobile-back-shade{0%,49%{opacity:0}54%{opacity:1}76%{opacity:.24}100%{opacity:0}}
+
+.results-table{width:100%;margin:3% 0 5%;border-collapse:collapse;color:var(--navy);font-family:Arial,Helvetica,sans-serif;font-size:clamp(7px,1.15vh,10px);text-align:left}
+.results-table th,.results-table td{padding:7px 9px;border:1px solid #aeb8c4}
+.results-table th{background:#edf1f5;font-weight:800;text-transform:uppercase;letter-spacing:.04em}
+.results-table td:last-child{text-align:center;font-weight:700}
+.results-table caption{padding:0 0 7px;color:var(--navy);font-weight:800;text-transform:uppercase;letter-spacing:.03em;text-align:left}
+.rangoli-results{table-layout:fixed;font-size:clamp(6.5px,1vh,9px)}
+.rangoli-results th,.rangoli-results td{padding:5px 6px;vertical-align:middle}
+.rangoli-results th:nth-child(1),.rangoli-results th:nth-child(2){width:24%}
+.rangoli-results td:nth-child(-n+2){text-align:center;font-weight:700;text-transform:uppercase}
+.rangoli-results td:last-child{text-align:left;font-weight:400}
+.rangoli-results td span{display:block;line-height:1.3}
+.results-page .results-table{margin-top:4%;font-size:clamp(9px,1.35vh,11.5px)}
+.results-page .results-table th,.results-page .results-table td{padding:8px 7px}
+.results-page .rangoli-results td span{line-height:1.45}
+.competition-result{min-height:0;color:var(--navy);font-family:Arial,Helvetica,sans-serif}
+.competition-result-meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:clamp(8px,1.25vh,11px);font-weight:800;text-transform:uppercase}
+.competition-result-meta span{border-bottom:1px solid currentColor}
+.competition-result-meta time{white-space:nowrap;border-bottom:1px solid currentColor}
+.competition-result h2{margin:7% 0 8%;font-size:clamp(10px,1.55vh,14px);line-height:1.25;text-align:center;text-decoration:underline;text-underline-offset:3px;text-transform:uppercase}
+.competition-result table{width:100%;border-collapse:collapse;table-layout:fixed;font-size:clamp(7px,1.22vh,10.5px);line-height:1.28;text-align:center}
+.competition-result th,.competition-result td{padding:9px 5px;border:1px solid #9ca8b7;vertical-align:middle;overflow-wrap:anywhere}
+.competition-result thead th{background:#edf1f5;font-weight:800;text-transform:uppercase}
+.competition-result tbody th{width:25%;font-weight:500;white-space:pre-line}
+.competition-result td span{display:block;white-space:pre-line}
+.competition-result td span+span{margin-top:6px;padding-top:6px;border-top:1px solid #c8d0d9}
+@media(max-width:700px){.competition-result table{font-size:clamp(6.5px,2vw,9px)}.competition-result th,.competition-result td{padding:5px 3px}}

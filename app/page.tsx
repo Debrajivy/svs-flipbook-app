@@ -2,9 +2,49 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-type Article = { title: string; paragraphs?: string[]; result?: string; images?: string[] };
-const titles = [
+type ResultRow = { label: string; value: string; participants?: string[] };
+type CompetitionResult = {
+  theme: string;
+  date: string;
+  heading: string;
+  groupHeading: string;
+  rankHeadings: string[];
+  rows: { group: string; winners: string[][] }[];
+};
+type Article = { title: string; paragraphs?: string[]; result?: string; results?: ResultRow[]; resultColumns?: [string, string, string?]; resultCaption?: string; images?: string[] };
+/* Legacy contents list retained in source history for reference.
 "Message from the Chairman","Message from the Founder & Director","Message from the Academic Director","Annual Report 2025–26: A Year of Growth & Achievement","A New Beginning: Inauguration of Srijan Valley School","Celebrating the Spirit of Freedom: Independence Day","Unveiling Creativity: Science, Art & Craft Exhibition","Colours of Creativity: Inter-House Rangoli Competition (with Results)","Celebrating Excellence: Prize Distribution Ceremony","Srijan Valley School Shines at the International Library & Cultural Centre (Fancy Dress Event)","Celebrating Childhood: Children’s Day","Caring for Our Children: Medical Health Check-Up Camp","Fancy Dress Fiesta: A Splash of Imagination (with Results)","Speak to Inspire: Speech Competition (with Results)","A Bright Celebration: Yellow Day","The Magic of Christmas: Christmas Celebration","Remembering Swami Vivekananda: National Youth Day","Celebrating Knowledge & Tradition: Basant Panchami","Honouring the Nation: Republic Day Celebration","Nurturing Talents, Celebrating Achievements (Curricular Activities & Results)","Colours on Canvas: Drawing Competition","Exploring Space: Space on Wheels","Discovering the Wonders of Science: Visit to Science City","A Day of Wonder & Laughter: Magic Show","Honouring Excellence: Felicitation Ceremony","Young Minds, Creative Words: Articles & Poems by Our Students","Our Mentors Speak: Teachers’ Messages"];
+*/
+const titles = [
+  "Message from the Chairman",
+  "Message from the Founder & Director",
+  "Message from the Academic Director",
+  "From the Principal’s Desk",
+  "Annual Report 2025–26: A Year of Growth & Achievement",
+  "A New Beginning: Inauguration of Srijan Valley School",
+  "Celebrating the Spirit of Freedom: Independence Day",
+  "Unveiling Creativity: Science, Art & Craft Exhibition",
+  "Colours of Creativity: Inter-House Rangoli Competition",
+  "Celebrating Excellence: Prize Distribution Ceremony",
+  "Srijan Valley School Shines at the International Library & Cultural Centre (Fancy Dress Event)",
+  "Celebrating Childhood: Children’s Day",
+  "Caring for Our Children: Medical Health Check-Up Camp",
+  "Fancy Dress Fiesta: A Splash of Imagination",
+  "Speak to Inspire: Speech Competition",
+  "A Bright Celebration: Yellow Day",
+  "The Magic of Christmas: Christmas Celebration",
+  "Remembering Swami Vivekananda: National Youth Day",
+  "Celebrating Knowledge & Tradition: Basant Panchami",
+  "Honouring the Nation: Republic Day Celebration",
+  "Nurturing Talents, Celebrating Achievements",
+  "Exploring Space: Space on Wheels",
+  "Discovering the Wonders of Science: Visit to Science City",
+  "A Day of Wonder & Laughter: Magic Show",
+  "Honouring Excellence: Felicitation Ceremony",
+  "Young Minds, Creative Words",
+  "Our Mentors Speak: Teachers’ Messages",
+];
+
 const copy: Record<number, Omit<Article,"title">> = {
 1:{paragraphs:["I am proud to see Srijan Valley School advancing its mission of bringing opportunity and excellence to children in rural communities. A school is more than a place of learning; it is where dreams take root, character is shaped and young minds gain the courage to imagine a better future.","We believe that every child deserves access to quality education, regardless of where they are born. With guidance, resources and encouragement, our students can achieve great heights and contribute meaningfully to society.","Our goal is to nurture not only capable students, but also compassionate and responsible citizens. True success lies in their integrity, perseverance and service to their families, communities and nation.","I sincerely appreciate our dedicated teachers, supportive parents and hardworking students. May this magazine celebrate the creativity and achievements of our young learners.","With warm wishes for the continued growth of Srijan Valley School and a bright future in which every student learns, serves and shines.","Govind Lall Agrawal\nChairman"]},
 2:{paragraphs:["A school magazine is more than a collection of articles, photographs and memories; it is a reflection of the vibrant life of the school. It provides our students with a platform to express their thoughts, creativity, talents and achievements. It also brings together the collective efforts of students, teachers and the school community, preserving precious memories and showcasing the values and vision of the institution.","The establishment of Srijan Valley School is rooted in a cherished dream—to bring quality education to children in the rural areas and provide them with facilities and opportunities at par with those available in the best educational institutions. My vision is not merely to impart academic knowledge, but to nurture confident, responsible, compassionate and capable individuals.","I believe that every child deserves the opportunity to dream big and receive the right guidance and environment to transform those dreams into reality. Through a balanced blend of academics, co-curricular activities, technology, sports, creativity and value-based education, we strive to develop the complete personality of every child.","My  dream will be truly fulfilled when the young learners of Srijan Valley School step into prestigious institutions for higher education, excel in their chosen fields and above all, grow into responsible citizens who contribute meaningfully to the progress and development of our nation.","As we present this magazine, I congratulate our students and teachers for their creativity, dedication and enthusiasm. May these pages inspire our children to explore, learn, create and always strive for excellence.","With best wishes for a bright and fulfilling future.","Pramod Agrawal\nFounder & Director"]},
@@ -24,6 +64,100 @@ const copy: Record<number, Omit<Article,"title">> = {
 22:{paragraphs:["A fascinating “Space on Wheels” exhibition was organised to introduce students to the wonders of space and astronomy. The exhibition was arranged in a specially designed bus showcasing various space-related models, pictures, and information.","The students of Srijan Valley School visited the exhibition with great enthusiasm. They explored the exhibits, asked several questions to the organisers, and gained interesting knowledge about space, planets, and space exploration.","The visit was an informative and enriching experience, making learning enjoyable and inspiring the children to develop a deeper interest in science and astronomy."]},
 23:{paragraphs:["The students of Srijan Valley School visited Science City with great enthusiasm and curiosity. The educational visit provided the children with an opportunity to observe various scientific exhibits and understand scientific concepts through practical and interactive experiences .","The visit was conducted under the guidance of senior teacher Mr. Soumya Garg, who encouraged the children to ask questions, explore and learn from their surroundings.","The trip was an enriching and enjoyable experience, combining learning, exploration and fun, and left the students with many new ideas and memorable experiences."]},
 25:{paragraphs:["The closing ceremony of the academic session 2025–26 at Srijan Valley School was celebrated on 24 April 2026 with great pride and enthusiasm. The occasion was graced by Shri Sanjay Seth, Hon’ble Union Minister of State for Defence, Government of India, as the Chief Guest. The programme began with lightning the lamp and a melodious welcome song presented by the students, followed by the welcome address by Shri Pramod Agrawal, Founder and Director.","The academic toppers of various classes were felicitated for their outstanding performance and received prizes from the Chief Guest. A special memento was presented to Shri Sanjay Seth by Shri Pawan Agrawal trustee member of the school as a token of respect and gratitude. Shri Pramod Agrawal also announced scholarships for the students securing the first position in their respective classes, encouraging them to continue their pursuit of excellence.","The occasion was further honoured by the presence of Dr. Renu Agrawal, Academic Director, Mr. Praneet Agrawal, Member of SMC along with other members of the School Managing Committee. The programme was anchored by Ms. Ananya Pandey, and the Vote of Thanks was proposed by Mrs. Seema Chitlangia, Principal.","The ceremony concluded on a joyful and inspiring note, celebrating the achievements of the students and marking the successful culmination of the session."]}}
+const requestedCopy: Record<number, Omit<Article, "title">> = {
+  4: { paragraphs: [
+    "“Education is not merely about filling young minds with knowledge; it is about nurturing them to think, create, lead and become responsible human beings.”",
+    "It gives me immense pleasure to present the Annual Magazine for the session 2025–26 of Srijan Valley School. This magazine is a reflection of the creativity, imagination, talent and achievements of our young learners. I feel proud to see our students expressing their thoughts and ideas through articles, poems, stories and other creative contributions.",
+    "At Srijan Valley School, we firmly believe that education goes beyond textbooks and examinations. Our magazine provides a meaningful platform for children to explore their interests, express their ideas and showcase their talents with confidence. We encourage every child to participate, create and discover their own potential.",
+    "I would like to express my heartfelt gratitude to our Founder and Director, Shri Pramod Agrawal, and our Academic Director, Dr. Renu Agrawal, for their constant guidance, encouragement and unwavering support. Their vision and commitment have been instrumental in creating a nurturing and progressive environment at Srijan Valley School.",
+    "I sincerely appreciate the efforts and cooperation of our teachers and students, whose hard work, creativity and enthusiasm have brought this magazine to life.",
+    "Our endeavour is to nurture children not only academically but also as confident, responsible and compassionate individuals. We strive to develop qualities such as hard work, discipline, leadership, creativity, effective communication, confidence, good values and a spirit of cooperation.",
+    "I hope this magazine inspires our children to dream big, work hard, think creatively and express themselves fearlessly. Let us continue to nurture young minds today and empower them to become confident, capable and responsible citizens of tomorrow.",
+    "Seema Chitlangia\nPrincipal",
+  ] },
+  5: { paragraphs: [
+    "The academic session 2025–26 marks a significant milestone in the journey of Srijan Valley School, as it was the school’s first year of operation. The school commenced its journey on 4 May 2025 with a clear vision of providing quality education in a nurturing, progressive and child-centred environment.",
+    "The first year has been a journey of learning, growth, new experiences and achievements. Starting with a small group of enthusiastic learners, Srijan Valley School gradually developed into a vibrant learning community where children were encouraged to learn with curiosity, participate actively and express themselves with confidence.",
+    "From the very beginning, the school focused on providing a strong foundation in academics while giving equal importance to personality development, creativity, communication skills, discipline, leadership and values. Activity-based learning, classroom participation and various co-curricular activities were incorporated to make learning meaningful and enjoyable.",
+    "Throughout the session, students participated enthusiastically in a wide range of activities and celebrations, exhibitions, competitions, cultural programmes and various special events. Special emphasis was also given to reading, spoken English, computer education, science activities and creative expression.",
+    "Srijan Valley School was established by Shri Pramod Agrawal, former Chairman of Coal India Limited, with the vision of providing quality education and holistic development opportunities to children in rural areas.",
+    "The sincere efforts of the teachers and the enthusiastic participation of our students have been the greatest strengths of this journey. We, the team of Srijan Valley School, also extend gratitude to the parents for their trust, cooperation and continued support.",
+    "As we look back at our first year, we feel proud of how far we have come. At the same time, we recognise that this is only the beginning. The first year has laid the foundation; the years ahead will build the legacy.",
+  ] },
+  6: { paragraphs: copy[5].paragraphs },
+  7: { paragraphs: copy[6].paragraphs },
+  8: { paragraphs: ["The school organised an Art, Craft and Science Exhibition on 13 October 2025. Students enthusiastically displayed creative exhibits under the guidance of their teachers.", "The exhibition was inaugurated by Dr. R. K. Sharma, Pithoria. A Parent-Teacher Meeting was also held, during which parents viewed the exhibits and collected their children’s answer sheets.", "The event beautifully reflected the creativity, scientific temperament and collaborative spirit of the students, leaving a lasting impression on everyone present."] },
+  9: { paragraphs: copy[8].paragraphs, resultCaption: "Result of Inter-House Rangoli Making Competition", resultColumns: ["Rank", "House", "Name of Participants"], results: [
+    { label: "First", value: "Jasmine", participants: ["Ananya Thakur", "Rishabh Kumar", "Ashwini Kumar"] },
+    { label: "Second", value: "Lotus", participants: ["Jiya Kumari", "Nishi Keshri", "Krit Kumar"] },
+    { label: "Third", value: "Rose", participants: ["Aalita Firdous", "Aditya Kumar", "Ayush Keshri"] },
+    { label: "Fourth", value: "Lily", participants: ["Nanis Keshri", "Pari Kumari", "Ayush Kumar Sahu"] },
+  ] },
+  10: { paragraphs: copy[9].paragraphs },
+  11: { paragraphs: copy[10].paragraphs },
+  12: { paragraphs: copy[11].paragraphs },
+  13: { paragraphs: copy[12].paragraphs },
+  14: { paragraphs: copy[13].paragraphs, results: [
+    { label: "Nursery", value: "Saransh Kumar" },
+    { label: "K.G.", value: "Arav Keshri" },
+    { label: "Std I", value: "Abhinav Raj" },
+    { label: "Std II", value: "Ayush Kuiry" },
+  ] },
+  15: { paragraphs: ["Srijan Valley School organised a Speech Competition to encourage students to develop confidence, communication skills and the art of public speaking. The enthusiastic participation of the students made the event engaging and enriching."] },
+  16: { paragraphs: copy[15].paragraphs },
+  17: { paragraphs: copy[16].paragraphs },
+  18: { paragraphs: copy[17].paragraphs },
+  19: { paragraphs: copy[18].paragraphs },
+  20: { paragraphs: ["Republic Day was celebrated at Srijan Valley School with great enthusiasm and patriotic fervour. The celebration commenced with the unfurling of the National Flag by the Chairman of the School, Shri Govind Lall Agrawal, followed by the National Anthem.", "Addressing the students, Shri Govind Lall Agrawal spoke about the importance of patriotism, responsibility and contributing positively to society. He inspired the children to become responsible citizens and work towards the progress of the nation.", "The programme was beautifully anchored by Ananya Thakur of Class VI. A number of students delivered inspiring speeches reflecting their love for the country and their commitment to serving society. The students pledged to work hard, remain responsible citizens and contribute towards building a stronger and better India.", "The Founder and Director, Shri Pramod Agrawal, Academic Director, Dr. Renu Agrawal, and other esteemed members of the School Managing Committee graced the occasion with their presence.", "The Principal, Mrs. Seema Chitlangia, encouraged the students to work hard as well as work smartly, reminding them that dedication, discipline and a positive attitude are the keys to success.", "The celebration concluded on a patriotic note, leaving the students inspired with a renewed sense of pride, responsibility and love for the nation."] },
+  21: { paragraphs: ["Co-curricular activities play a vital role in the holistic development of children. They provide students with opportunities to discover their talents, develop creativity, build confidence, improve communication skills and learn the values of teamwork, discipline and leadership.", "Srijan Valley School is committed to the all-round development of every student. Keeping this vision in mind, a number of co-curricular activities and competitions were organised throughout the session 2025–26. Students participated in these activities with great enthusiasm and showcased their creativity, confidence and talents.", "These activities provided every child with a platform to explore their potential, express themselves freely and learn through experience. The enthusiastic participation of the students made each event successful and memorable. The results of the various activities are given below."] },
+  22: { paragraphs: copy[22].paragraphs },
+  23: { paragraphs: copy[23].paragraphs },
+  24: { paragraphs: ["“Education is not only about studies; a child’s mind also needs moments of joy and recreation.”", "After the completion of the Final Examination, Srijan Valley School organised a Magic Show to refresh and entertain the children. A talented magician presented fascinating magic tricks that left the children amazed and delighted.", "The show was not limited to Srijan Valley students; children from other schools also participated and enjoyed the fun-filled event. It was a memorable day of laughter, excitement and recreation, giving the children a much-needed break after their examinations."] },
+  25: { paragraphs: copy[25].paragraphs },
+};
+
+const achievementResults: CompetitionResult[] = [
+  {
+    theme: "Penmanship Perfection",
+    date: "01/11/2025",
+    heading: "Result of English Handwriting Competition",
+    groupHeading: "Group/Class",
+    rankHeadings: ["First", "Second", "Third"],
+    rows: [
+      { group: "Group A\n(Std V & VI)", winners: [["Pari Kumari"], ["Nishi Keshri"], ["Jiya Kumari"]] },
+      { group: "Group B\n(Std III & IV)", winners: [["Aradhya Raj"], ["Yash Raj Keshri"], ["Anshika Priya"]] },
+      { group: "Group C\n(Std II)", winners: [["Ayush Kuiry"], ["Priyanshu Thakur"], ["–"]] },
+      { group: "Group D\n(Std I)", winners: [["Abhinav Raj"], ["–"], ["–"]] },
+    ],
+  },
+  {
+    theme: "Expression in Words",
+    date: "03/12/2025",
+    heading: "Result of Hindi Elocution Competition",
+    groupHeading: "Group/Class",
+    rankHeadings: ["First", "Second"],
+    rows: [
+      { group: "Group A\n(Std III & IV)", winners: [["Aradhya Raj\n(Std III)"], ["Pihu Kumari\n(Std III)", "Yash Keshri\n(Std IV)"]] },
+      { group: "Group B\n(Std V & VI)", winners: [["Ananya Thakur\n(Std VI)"], ["Ashwini Kumar\n(Std V)", "Jiya Kumari\n(Std VI)"]] },
+    ],
+  },
+  {
+    theme: "The Creative Canvas",
+    date: "11/02/2026",
+    heading: "Result of Drawing Competition",
+    groupHeading: "Class",
+    rankHeadings: ["Winner’s Name"],
+    rows: [
+      { group: "Std I", winners: [["Abhinav Raj"]] },
+      { group: "Std II", winners: [["Ayush Kuiry"]] },
+      { group: "Std III", winners: [["Parween Kumar"]] },
+      { group: "Std IV", winners: [["Yash Keshri"]] },
+      { group: "Std V", winners: [["Pari Kumari"]] },
+      { group: "Std VI", winners: [["Ayush Kumar Sahu"]] },
+    ],
+  },
+];
+
 const articleImages: Record<number,string[]> = {
   2:["/assets/annual-report/director.jpg"],
   5:[
@@ -143,12 +277,41 @@ const articleImages: Record<number,string[]> = {
     "/assets/annual-report/felicitation-07.jpg","/assets/annual-report/felicitation-08.jpg",
   ],
 };
-const articles: Article[] = titles.map((title,i)=>({title,...copy[i+1],images:articleImages[i+1]}));
+const requestedArticleImages: Record<number, string[]> = {
+  1: ["/assets/annual-report/chairman.jpeg"],
+  2: articleImages[2],
+  3: ["/assets/annual-report/academic.jpeg"],
+  4: ["/assets/annual-report/principal.jpeg"],
+  6: articleImages[5],
+  7: articleImages[6],
+  9: articleImages[8],
+  10: articleImages[9],
+  11: articleImages[10],
+  12: articleImages[11],
+  13: articleImages[12],
+  14: articleImages[13],
+  15: articleImages[14],
+  16: articleImages[15],
+  17: articleImages[16],
+  18: articleImages[17],
+  19: articleImages[18],
+  20: articleImages[19],
+  22: articleImages[22],
+  23: articleImages[23],
+  24: articleImages[24],
+  25: articleImages[25],
+};
+const articles: Article[] = titles.map((title, i) => ({
+  title,
+  ...copy[i + 1],
+  ...requestedCopy[i + 1],
+  images: requestedArticleImages[i + 1] ?? articleImages[i + 1],
+}));
 type ContentsEntry = { number: number; title: string; page: number };
 type PageData =
   | { kind: "cover"; image: string; alt: string }
   | { kind: "contents"; entries: ContentsEntry[]; continuation: boolean }
-  | { kind: "story"; article: Article; serial: number; paragraphs: string[]; images: string[]; continuation: boolean }
+  | { kind: "story"; article: Article; serial: number; paragraphs: string[]; images: string[]; continuation: boolean; openingPortrait?: boolean; resultsPage?: boolean; competitionResult?: CompetitionResult }
   | { kind: "blank" };
 
 const CONTENTS_PER_PAGE = 9;
@@ -173,12 +336,25 @@ function splitParagraphs(paragraphs: string[] = []) {
 }
 
 const articleChunks = articles.map((article, index) => {
+  const isOpeningPortrait = index < 4 && article.images?.length === 1;
+  if (isOpeningPortrait) {
+    const openingParagraphCount = index === 3 ? 2 : 1;
+    const openingParagraphs = (article.paragraphs ?? []).slice(0, openingParagraphCount);
+    const remainingParagraphs = (article.paragraphs ?? []).slice(openingParagraphCount);
+    const remainingGroups = splitParagraphs(remainingParagraphs);
+    return [
+      { kind: "story" as const, article, serial: index + 1, paragraphs: openingParagraphs, images: article.images ?? [], continuation: false, openingPortrait: true },
+      ...remainingGroups.filter((paragraphs) => paragraphs.length > 0).map((paragraphs) => ({ kind: "story" as const, article, serial: index + 1, paragraphs, images: [], continuation: true })),
+    ];
+  }
   const textGroups=splitParagraphs(article.paragraphs);
   const imageGroups=Array.from({length:Math.ceil((article.images?.length??0)/2)},(_,part)=>article.images!.slice(part*2,part*2+2));
-  const groups=article.paragraphs?.length
+  const groups: { paragraphs: string[]; images: string[]; competitionResult?: CompetitionResult }[] = article.paragraphs?.length
     ? [...textGroups.map(paragraphs=>({paragraphs,images:[]})),...imageGroups.map(images=>({paragraphs:[],images}))]
     : imageGroups.length?imageGroups.map(images=>({paragraphs:[],images})):[{paragraphs:[],images:[]}];
-  return groups.map((group,part)=>({kind:"story" as const,article,serial:index+1,...group,continuation:part>0}));
+  if (article.results?.length) groups.splice(textGroups.length, 0, { paragraphs: [], images: [] });
+  if (index === 20) groups.splice(textGroups.length, 0, ...achievementResults.map((competitionResult) => ({ paragraphs: [], images: [], competitionResult })));
+  return groups.map((group,part)=>({kind:"story" as const,article,serial:index+1,...group,continuation:part>0,resultsPage:Boolean(article.results?.length)&&part===textGroups.length}));
 });
 const contentsPageCount = Math.ceil(titles.length / CONTENTS_PER_PAGE);
 const articleStartPages: number[] = [];
@@ -194,11 +370,28 @@ const bookPages: PageData[] = [
 if (bookPages.length % 2 === 0) bookPages.splice(bookPages.length - 1, 0, { kind: "blank" });
 
 function Footer({ n }: { n: number }) { return <footer><span>Srijan Valley School</span><b>{String(n).padStart(2, "0")}</b></footer>; }
+function ResultsTable({ rows, columns = ["Class", "Winner’s Name"], caption }: { rows: ResultRow[]; columns?: [string, string, string?]; caption?: string }) {
+  return <table className={`results-table ${columns[2] ? "rangoli-results" : ""}`}>{caption && <caption>{caption}</caption>}<thead><tr><th>{columns[0]}</th><th>{columns[1]}</th>{columns[2] && <th>{columns[2]}</th>}</tr></thead><tbody>{rows.map((row) => <tr key={row.label}><td>{row.label}</td><td>{row.value}</td>{columns[2] && <td>{row.participants?.map((name) => <span key={name}>{name}</span>)}</td>}</tr>)}</tbody></table>;
+}
+function CompetitionResultTable({ result }: { result: CompetitionResult }) {
+  const hasRanks = result.rankHeadings.length > 1;
+  return <section className="competition-result">
+    <div className="competition-result-meta"><span>{result.theme}</span><time>{result.date}</time></div>
+    <h2>{result.heading}</h2>
+    <table>
+      <thead>{hasRanks ? <><tr><th rowSpan={2}>{result.groupHeading}</th><th colSpan={result.rankHeadings.length}>Rank</th></tr><tr>{result.rankHeadings.map((rank) => <th key={rank}>{rank}</th>)}</tr></> : <tr><th>{result.groupHeading}</th><th>{result.rankHeadings[0]}</th></tr>}</thead>
+      <tbody>{result.rows.map((row) => <tr key={row.group}><th scope="row">{row.group}</th>{row.winners.map((winners, index) => <td key={index}>{winners.map((winner) => <span key={winner}>{winner}</span>)}</td>)}</tr>)}</tbody>
+    </table>
+  </section>;
+}
 function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }) {
   if (!data || data.kind === "blank") return <div className="paper blank-page" />;
   if (data.kind === "cover") return <div className="cover"><Image src={data.image} alt={data.alt} fill sizes="(max-width: 760px) 92vw, 520px" priority={pageNumber === 0} /></div>;
-  if (data.kind === "contents") return <div className="paper contents"><small>Annual Chronicle 2025–26</small><h1>{data.continuation ? "Contents continued" : "Contents"}</h1><section>{data.entries.map((entry) => <div key={entry.number}><b>{String(entry.number).padStart(2, "0")}</b><span>{entry.title}</span><i aria-hidden="true" /><em>{String(entry.page).padStart(2, "0")}</em></div>)}</section><Footer n={pageNumber} /></div>;
-  return <div className={`paper story ${data.paragraphs.length||data.images.length ? "" : "empty"} ${data.images.length===1?"portrait-story":""}`}><small>{data.continuation ? `Continued · ${String(data.serial).padStart(2, "0")}` : `Feature · ${String(data.serial).padStart(2, "0")}`}</small><h1>{data.article.title}</h1><i className="rule" />{data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}{data.article.result && !data.continuation && <p className="result">{data.article.result}</p>}</section>}{data.images.length>0&&<section className={`story-gallery gallery-${data.images.length}`}>{data.images.map((src,index)=><figure key={src}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>}<Footer n={pageNumber} /></div>;
+  if (data.kind === "contents") return <div className="paper contents"><small>Annual Chronicle 2025–26</small><h1>{data.continuation ? "Continued" : "Contents"}</h1><section>{data.entries.map((entry) => <div key={entry.number}><b>{String(entry.number).padStart(2, "0")}</b><span>{entry.title}</span><i aria-hidden="true" /><em>{String(entry.page).padStart(2, "0")}</em></div>)}</section><Footer n={pageNumber} /></div>;
+  const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length}`}>{data.images.map((src,index)=><figure key={src}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>;
+  const copyBlock = data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}</section>;
+  const showResults = data.article.results && data.resultsPage;
+  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}><small>{data.continuation ? `Continued · ${String(data.serial).padStart(2, "0")}` : `Feature · ${String(data.serial).padStart(2, "0")}`}</small><h1>{data.article.title}</h1><i className="rule" />{data.openingPortrait ? <>{gallery}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}</>}<Footer n={pageNumber} /></div>;
 }
 export default function Home(){
   const [page,setPage]=useState(0);
