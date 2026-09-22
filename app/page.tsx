@@ -161,8 +161,6 @@ const achievementResults: CompetitionResult[] = [
 const articleImages: Record<number,string[]> = {
   2:["/assets/annual-report/director.jpg"],
   5:[
-    "/assets/annual-report/inauguration-aa.jpg",
-    "/assets/annual-report/inauguration-bb.jpg",
     "/assets/annual-report/inauguration-cc.jpg",
     "/assets/annual-report/inauguration-dd.jpg",
     "/assets/annual-report/inauguration-ee.jpg",
@@ -282,6 +280,7 @@ const requestedArticleImages: Record<number, string[]> = {
   2: articleImages[2],
   3: ["/assets/annual-report/academic.jpeg"],
   4: ["/assets/annual-report/principal.jpeg"],
+  5: [],
   6: articleImages[5],
   7: articleImages[6],
   9: articleImages[8],
@@ -391,7 +390,12 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length}`}>{data.images.map((src,index)=><figure key={src}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>;
   const copyBlock = data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}</section>;
   const showResults = data.article.results && data.resultsPage;
-  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}><small>{data.continuation ? `Continued · ${String(data.serial).padStart(2, "0")}` : `Feature · ${String(data.serial).padStart(2, "0")}`}</small><h1>{data.article.title}</h1><i className="rule" />{data.openingPortrait ? <>{gallery}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}</>}<Footer n={pageNumber} /></div>;
+  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
+    <small>{data.continuation ? "Continued" : `Feature · ${String(data.serial).padStart(2, "0")}`}</small>
+    {!data.continuation && <><h1>{data.article.title}</h1><i className="rule" /></>}
+    {data.openingPortrait ? <>{gallery}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}</>}
+    <Footer n={pageNumber} />
+  </div>;
 }
 export default function Home(){
   const [page,setPage]=useState(0);
