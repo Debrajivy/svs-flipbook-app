@@ -96,12 +96,19 @@
 .copy .signature{white-space:pre-line;color:var(--navy);font-family:Arial,Helvetica,sans-serif;font-size:.9em;font-weight:700;line-height:1.45;text-align:left}
 .story-gallery{flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4%;margin:0 0 3%;padding-bottom:5%}
 .story-gallery figure{position:relative;flex:0 0 45%;width:100%;min-width:0;min-height:0;margin:0;overflow:hidden;border:4px solid #fff;border-radius:3px;background:#f2eee7;box-shadow:0 6px 16px rgba(7,28,54,.14)}
+.story-gallery figure.portrait-frame{align-self:center;flex:none;width:50%;aspect-ratio:2/3}
+.story-gallery.side-by-side-portraits{flex-direction:row;align-items:center;justify-content:center;gap:4%}
+.story-gallery.side-by-side-portraits figure{flex:none;width:46%;aspect-ratio:7/16}
+.story-gallery.exhibition-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:48% 48%;gap:4%;align-content:stretch}
+.story-gallery.exhibition-gallery figure{width:100%;height:100%;min-height:0}
+.story-gallery.exhibition-gallery figure:first-child{grid-column:1/-1}
+.story-gallery.exhibition-gallery figure.exhibition-portrait-frame{align-self:stretch;justify-self:center;width:auto;height:100%;aspect-ratio:133/314}
 .story-gallery img{object-fit:contain;object-position:center}
-.opening-portrait .story-gallery{flex:none;width:44%;aspect-ratio:4/5;align-self:center;min-height:0;margin:0 0 3%;padding:0}
+.opening-portrait .story-gallery{flex:none;width:40%;aspect-ratio:4/5;align-self:center;min-height:0;margin:0 0 3%;padding:0}
 .opening-portrait.portrait-square .story-gallery{aspect-ratio:1}
 .opening-portrait .story-gallery figure{flex:1 1 auto;height:100%;background:#fffdf8}
-.opening-portrait .copy{flex:none}
-.opening-portrait .copy p{margin-bottom:0}
+.opening-portrait .copy{flex:none;font-size:clamp(7.6px,1.36vh,11.5px);line-height:1.36}
+.opening-portrait .copy p{margin:0 0 2.5%}
 .story.empty{justify-content:center}
 .story.empty footer{display:flex}
 .blank-page:after{background:linear-gradient(90deg,rgba(12,26,48,.1),transparent 8%,transparent 92%,rgba(10,20,35,.05))}
