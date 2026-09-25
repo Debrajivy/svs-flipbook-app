@@ -597,6 +597,7 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
     const { student } = data;
     return <article className={`paper story student-page student-page-${student.language} ${student.format === "poem" ? "student-page-poem" : ""}`} lang={student.language}>
       <small>Feature · {String(data.serial).padStart(2, "0")} · Student Voice{data.showProfile ? "" : " · Continued"}</small>
+      {!data.continuation && <h1 className="student-section-title">{data.article.title}</h1>}
       {data.showProfile ? <div className="student-intro">
           <div className="student-heading">
             <h1>{student.title}</h1>

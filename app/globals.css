@@ -233,6 +233,7 @@
 /* Student writing: one portrait and one complete submission per editorial page. */
 .student-page{padding-top:6.5%}
 .student-page>small{margin-bottom:3%}
+.student-page h1.student-section-title{max-width:96%;margin:0 0 4%;color:var(--navy);font-family:Georgia,'Times New Roman',serif;font-size:clamp(21px,4vh,37px);font-weight:400;letter-spacing:-.025em;line-height:1.05;text-transform:none}
 .student-intro{display:grid;grid-template-columns:minmax(0,1fr) 29%;gap:6%;align-items:center}
 .student-heading{min-width:0}
 .student-page h1{max-width:none;font-size:clamp(18px,3.25vh,31px);line-height:1.12}
