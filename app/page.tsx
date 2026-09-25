@@ -12,6 +12,22 @@ type CompetitionResult = {
   rows: { group: string; winners: string[][] }[];
 };
 type Article = { title: string; paragraphs?: string[]; result?: string; results?: ResultRow[]; resultColumns?: [string, string, string?]; resultCaption?: string; images?: string[] };
+type StudentSubmission = {
+  title: string;
+  author: string;
+  className: string;
+  rollNumber?: string;
+  image: string;
+  language: "hi" | "en";
+  format?: "article" | "poem";
+  pageBreakAfter?: number;
+  paragraphs: string[];
+};
+type MentorMessage = {
+  name: string;
+  image: string;
+  message: string;
+};
 /* Legacy contents list retained in source history for reference.
 "Message from the Chairman","Message from the Founder & Director","Message from the Academic Director","Annual Report 2025–26: A Year of Growth & Achievement","A New Beginning: Inauguration of Srijan Valley School","Celebrating the Spirit of Freedom: Independence Day","Unveiling Creativity: Science, Art & Craft Exhibition","Colours of Creativity: Inter-House Rangoli Competition (with Results)","Celebrating Excellence: Prize Distribution Ceremony","Srijan Valley School Shines at the International Library & Cultural Centre (Fancy Dress Event)","Celebrating Childhood: Children’s Day","Caring for Our Children: Medical Health Check-Up Camp","Fancy Dress Fiesta: A Splash of Imagination (with Results)","Speak to Inspire: Speech Competition (with Results)","A Bright Celebration: Yellow Day","The Magic of Christmas: Christmas Celebration","Remembering Swami Vivekananda: National Youth Day","Celebrating Knowledge & Tradition: Basant Panchami","Honouring the Nation: Republic Day Celebration","Nurturing Talents, Celebrating Achievements (Curricular Activities & Results)","Colours on Canvas: Drawing Competition","Exploring Space: Space on Wheels","Discovering the Wonders of Science: Visit to Science City","A Day of Wonder & Laughter: Magic Show","Honouring Excellence: Felicitation Ceremony","Young Minds, Creative Words: Articles & Poems by Our Students","Our Mentors Speak: Teachers’ Messages"];
 */
@@ -73,7 +89,7 @@ const requestedCopy: Record<number, Omit<Article, "title">> = {
     "I sincerely appreciate the efforts and cooperation of our teachers and students, whose hard work, creativity and enthusiasm have brought this magazine to life.",
     "Our endeavour is to nurture children not only academically but also as confident, responsible and compassionate individuals. We strive to develop qualities such as hard work, discipline, leadership, creativity, effective communication, confidence, good values and a spirit of cooperation.",
     "I hope this magazine inspires our children to dream big, work hard, think creatively and express themselves fearlessly. Let us continue to nurture young minds today and empower them to become confident, capable and responsible citizens of tomorrow.",
-    "Seema Chitlangia\nPrincipal",
+    "Seema Chitlangia\n",
   ] },
   5: { paragraphs: [
     "The academic session 2025–26 marks a significant milestone in the journey of Srijan Valley School, as it was the school’s first year of operation. The school commenced its journey on 4 May 2025 with a clear vision of providing quality education in a nurturing, progressive and child-centred environment.",
@@ -332,6 +348,8 @@ type PageData =
   | { kind: "cover"; image: string; alt: string }
   | { kind: "contents"; entries: ContentsEntry[]; continuation: boolean }
   | { kind: "story"; article: Article; serial: number; paragraphs: string[]; images: string[]; continuation: boolean; openingPortrait?: boolean; resultsPage?: boolean; competitionResult?: CompetitionResult }
+  | { kind: "student"; article: Article; serial: number; student: StudentSubmission; paragraphs: string[]; continuation: boolean; showProfile: boolean }
+  | { kind: "mentors"; article: Article; serial: number; mentors: MentorMessage[]; continuation: boolean }
   | { kind: "blank" };
 
 const CONTENTS_PER_PAGE = 9;
@@ -339,6 +357,136 @@ const TEXT_BUDGET = 1120;
 const exhibitionImageGroups = [
   ["/assets/annual-report/exhibition-01.jpg", "/assets/annual-report/exhibition-02.jpg", "/assets/annual-report/exhibition-03.jpg"],
   ["/assets/annual-report/exhibition-04.jpg", "/assets/annual-report/exhibition-05.jpg", "/assets/annual-report/exhibition-06.jpg"],
+];
+
+const studentSubmissions: StudentSubmission[] = [
+  {
+    title: "तिरंगा – एकता, गौरव और स्वाभिमान का प्रतीक",
+    author: "आरोही सिंह",
+    className: "कक्षा 7",
+    image: "/assets/student1.jpeg",
+    language: "hi",
+    paragraphs: [
+      "हमारा राष्ट्रीय ध्वज तिरंगा हर भारतीय के लिए शान और गौरव का प्रतीक है। इसमें तीन मुख्य रंग होते हैं। सबसे ऊपर केसरिया रंग साहस और बलिदान को दर्शाता है। बीच में सफेद रंग शांति और सच्चाई का संदेश देता है और सबसे नीचे हरा रंग हमारे देश की हरियाली और खुशहाली को दर्शाता है। सफेद पट्टी के बीच में नीले रंग का अशोक चक्र है, जो हमें हमेशा आगे बढ़ते रहने की सीख देता है।",
+      "यह तिरंगा हमें उन वीर शहीदों की याद दिलाता है, जिन्होंने देश को आज़ाद कराने के लिए अपना सब कुछ न्योछावर कर दिया। जब भी हम तिरंगे को आसमान में लहराते हुए देखते हैं, हमारा सिर गर्व से ऊँचा हो जाता है। स्कूल की प्रार्थना के माध्यम से हम सब यह संकल्प लेते हैं कि हम हमेशा अपने तिरंगे का सम्मान करेंगे और देश के अच्छे नागरिक बनेंगे।",
+      "जय हिंद!",
+    ],
+  },
+  {
+    title: "छोटे-छोटे प्रयास, बड़े बदलाव",
+    author: "सृष्टि कुमारी",
+    className: "कक्षा 6",
+    image: "/assets/student4.jpeg",
+    language: "hi",
+    paragraphs: [
+      "छोटे-छोटे प्रयास मिलकर बड़े बदलाव लाते हैं। यदि हम रोज थोड़ा-थोड़ा पढ़ें, तो हमारी पढ़ाई अच्छी हो सकती है और हम अच्छे अंक प्राप्त कर सकते हैं। इसी तरह हमें अपने आसपास सफाई रखनी चाहिए, पेड़-पौधे लगाने चाहिए, पानी और बिजली की बचत करनी चाहिए तथा अपने बड़ों का सम्मान करना चाहिए।",
+      "हमारे छोटे-छोटे अच्छे कार्य समाज और पर्यावरण पर बड़ा प्रभाव डाल सकते हैं। यदि हर व्यक्ति अपने घर और आसपास की सफाई का ध्यान रखे, तो हमारा पूरा मोहल्ला स्वच्छ बन सकता है। यदि हम एक पेड़ लगाएँ और उसकी देखभाल करें, तो वह आगे चलकर हमें छाया, फल और स्वच्छ हवा दे सकता है।",
+      "इसलिए हमें यह नहीं सोचना चाहिए कि हमारा छोटा-सा प्रयास किसी काम का नहीं है। बूंद-बूंद से ही समुद्र बनता है। हमें हमेशा अच्छे कार्य करने का छोटा-सा प्रयास करते रहना चाहिए। एक छोटी शुरुआत ही बड़े बदलाव की पहली सीढ़ी होती है।",
+    ],
+  },
+  {
+    title: "Time Management",
+    author: "Umme Ruman",
+    className: "Class 7",
+    image: "/assets/student2.jpeg",
+    language: "en",
+    pageBreakAfter: 4,
+    paragraphs: [
+      "Time and tide wait for none. Time is one of the most precious things in our life. We can recover many losses in life, but we can never recover the time that we have lost. Even millions of dollars cannot bring back lost time. Therefore, we should use our time wisely and carefully.",
+      "We should invest our time in activities that are useful for our future. As students, it is our duty to utilise our time in such a way that it increases our knowledge and helps us grow academically and personally. Even a small waste of time can sometimes lead to a big loss in life.",
+      "Time management does not mean working all day. It means knowing what is important and giving the right amount of time to the right task. Imagine your time as a handful of sand. If you hold it carefully, you can keep it, but if you let it slip through your fingers, you can never collect the same grains again.",
+      "As students, we often waste our precious time scrolling through our phones, watching unnecessary videos, playing games, or simply saying, “I will do it later.” As the saying goes, “Tomorrow is often the busiest day of the week.”",
+      "The secret of successful people is not that they have more time; they simply use their time more wisely. Therefore, we should make a proper timetable and follow it sincerely.",
+      "We will respect time.\nWe will value every minute.\nWe will stop postponing our dreams.\nWe will use every day as an opportunity to become better than yesterday.",
+      "Time is life. Waste your time, and you waste a part of your life. Respect your time, and you give yourself a chance to create a beautiful future.",
+    ],
+  },
+  {
+    title: "जल है तो कल है",
+    author: "नैंसी केशरी",
+    className: "कक्षा 7",
+    image: "/assets/student3.jpeg",
+    language: "hi",
+    paragraphs: [
+      "जल केवल पानी नहीं है, जल ही जीवन है। हमारे शरीर में पानी है, खेतों में पानी है, पेड़-पौधों में पानी है और प्रकृति की हर धड़कन में पानी है। यदि जल है, तो जीवन है; यदि जल नहीं है, तो जीवन की कल्पना भी नहीं की जा सकती।",
+      "ज़रा सोचिए—अगर एक दिन हमारे घरों में पानी न आए, तो क्या होगा? न नहाना संभव होगा, न खाना बनाना, न सफाई और न ही खेती। और यदि यही स्थिति हमेशा के लिए हो जाए, तो मनुष्य, पशु-पक्षियों और पेड़-पौधों का अस्तित्व ही संकट में पड़ जाएगा।",
+      "दुर्भाग्य से, आज हम जल का महत्व समझने के बावजूद इसका अत्यधिक दुरुपयोग कर रहे हैं। नल खुला छोड़ देना, आवश्यकता से अधिक पानी बहाना, तालाबों और नदियों को प्रदूषित करना तथा पेड़ों की अंधाधुंध कटाई करना—ये सभी हमारे भविष्य के लिए खतरे की घंटी हैं।",
+      "आज कई क्षेत्रों में लोग पानी की एक-एक बूंद के लिए संघर्ष कर रहे हैं। भूजल का स्तर लगातार नीचे जा रहा है। यदि हमने समय रहते जल संरक्षण नहीं किया, तो आने वाली पीढ़ियाँ हमें कभी माफ नहीं करेंगी।",
+      "हमें याद रखना चाहिए—\n\n“बूंद-बूंद से सागर बनता है,\nबूंद-बूंद से जीवन चलता है।”",
+      "जल हमारे जीवन का आधार है। इसलिए हमें पानी की हर बूंद का महत्व समझना चाहिए और जल को बचाने का संकल्प लेना चाहिए। आज जल बचाएँगे, तभी हमारा कल सुरक्षित होगा।",
+    ],
+  },
+  {
+    title: "The Joy of Learning",
+    author: "Jiya Kumari",
+    className: "Class 7",
+    image: "/assets/student5.jpeg",
+    language: "en",
+    paragraphs: [
+      "Learning is one of the most beautiful and exciting parts of life. The joy of learning means feeling happy and curious when we discover something new. Every day gives us a chance to learn something different. We learn from our teachers, parents, friends, books, nature, and our own experiences.",
+      "Learning is not only about studying textbooks or getting good marks in examinations. It helps us understand the world, develop new skills, solve problems, and become confident. When we learn something difficult and finally understand it, we feel a great sense of achievement. Even our mistakes can teach us valuable lessons and help us improve.",
+      "A curious mind always wants to know more. Asking questions, reading books, doing experiments, and observing things around us can make learning interesting. We should never be afraid of making mistakes because mistakes are a natural part of learning.",
+      "The joy of learning makes us more creative, confident, and independent. It also helps us achieve our dreams and become responsible people. Therefore, we should enjoy the process of learning and always remain curious. Learning is a lifelong journey, and every new thing we learn adds something valuable to our lives.",
+    ],
+  },
+  {
+    title: "शिक्षा का महत्व",
+    author: "आदित्य राज",
+    className: "कक्षा 6",
+    image: "/assets/student6.jpeg",
+    language: "hi",
+    format: "poem",
+    paragraphs: [
+      "ज्ञान से बड़ा कोई धन नहीं,\nऔर शिक्षा से बड़ा उपहार नहीं।\nजो सीखने की चाह रखता है,\nउसके लिए कोई हार नहीं।",
+      "किताबें रास्ता दिखाती है,\nऔर मंजिल तक पहुंचाती हैं।\nशिक्षा ही वो रोशनी है,\nजो अंधेरे को मिटाती है।",
+      "इसलिए शिक्षा के सम्मान करो,\nज्ञान को अपना हथियार बनाओ।\nक्योंकि जो सीखता रहता है,\nवही जीवन में आगे बढ़ पाता है।",
+    ],
+  },
+  {
+    title: "The Power of Positive Thoughts",
+    author: "Aradhya Kumari Sahu",
+    className: "Class VI",
+    rollNumber: "Roll No. 11",
+    image: "/assets/AradhyaKumariSahu.jpg.jpeg",
+    language: "en",
+    paragraphs: [
+      "Life is full of mysteries. Sometimes it is all about happiness, and at other times we face a lot of struggles. So the question arises: what should we do in both situations, and how do we balance everything when life is on a rollercoaster? The answer is positive thinking. When everything is fine and we are winning in life, we should be humble and thankful, and show gratitude to others. When our life hits rock bottom, we should follow the same process, adding a little extra hard work to achieve the life we want.",
+      "The first step is always trying—it does not matter if we fail, as long as we learn from our mistakes. The second step is following guidelines and discipline in our lifestyle and being firm about it. The third step is having a strong mindset and surrounding ourselves with positive people. Last but not least, we should never give up on anything. We should try to find happiness in the small events and achievements of our life. One day, we will know that the secret behind every success is always hidden in our positive thinking.",
+    ],
+  },
+];
+
+const mentorMessages: MentorMessage[] = [
+  {
+    name: "Abhijeet Sir",
+    image: "/assets/AbhijeetSirPic.jpg.jpeg",
+    message: "The beautiful thing about learning is that no one can take it away from you. At Srijan Valley School, we provide the best education to our students so that they can flourish throughout their lives.",
+  },
+  {
+    name: "Soumya Sir",
+    image: "/assets/SoumyaSirPic.png",
+    message: "A teacher is one who shapes the lives of young generations. As teachers, our role is not just to explain the topics given in books, but also to make students aware of how to use things practically in their lives. The true success of any student lies in their knowledge and skills.",
+  },
+  {
+    name: "Priyanka Devi Ma’am",
+    image: "/assets/PriyankaDeviMaam Pic.jpg.jpeg",
+    message: "Srijan Valley School is a wonderful place of learning and growth. Our school provides a positive and friendly environment for students. Teachers guide and support every child with care and dedication. We focus on education, discipline, creativity and good values. Our aim is to help every student become confident, responsible and successful.",
+  },
+  {
+    name: "Saima Parween",
+    image: "/assets/SaimaParweenpic.png",
+    message: "Respect means treating everyone with kindness, care and good manners. We should respect our parents, teachers, friends, elders and everyone around us. We must listen to others and never hurt or make fun of anyone. Everyone is special and deserves to be valued. Respect others and make the world a better place.",
+  },
+  {
+    name: "Ananya Pandey",
+    image: "/assets/AnanyaPandeyPic.jpg.jpeg",
+    message: "Teaching is more than a profession; it is a privilege. Every day, I get to shape little minds, build confidence and make learning meaningful. I may teach lessons, but my students teach me patience, kindness and joy. Every question, mistake and little achievement is a part of their journey. My goal is not just to teach, but to leave every child a little more confident than I found them. A teacher’s impact lives far beyond the classroom.",
+  },
+  {
+    name: "Eni Guria",
+    image: "/assets/EniGuriaPic.jpg.jpeg",
+    message: "Every small effort takes us one step closer to our dreams. Therefore, we should always believe in ourselves and work hard to achieve our goals.",
+  },
 ];
 
 function splitParagraphs(paragraphs: string[] = []) {
@@ -360,6 +508,31 @@ function splitParagraphs(paragraphs: string[] = []) {
 }
 
 const articleChunks = articles.map((article, index) => {
+  if (index === 25) {
+    return studentSubmissions.flatMap((student, submissionIndex) => {
+      const paragraphGroups = student.pageBreakAfter
+        ? [student.paragraphs.slice(0, student.pageBreakAfter), student.paragraphs.slice(student.pageBreakAfter)]
+        : [student.paragraphs];
+      return paragraphGroups.map((paragraphs, part) => ({
+        kind: "student" as const,
+        article,
+        serial: index + 1,
+        student,
+        paragraphs,
+        continuation: submissionIndex > 0 || part > 0,
+        showProfile: part === 0,
+      }));
+    });
+  }
+  if (index === 26) {
+    return Array.from({ length: Math.ceil(mentorMessages.length / 2) }, (_, part) => ({
+      kind: "mentors" as const,
+      article,
+      serial: index + 1,
+      mentors: mentorMessages.slice(part * 2, part * 2 + 2),
+      continuation: part > 0,
+    }));
+  }
   const isOpeningPortrait = index < 4 && article.images?.length === 1;
   if (isOpeningPortrait) {
     // Use the available space beneath each portrait before continuing the message.
@@ -420,6 +593,34 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   if (!data || data.kind === "blank") return <div className="paper blank-page" />;
   if (data.kind === "cover") return <div className="cover"><Image src={data.image} alt={data.alt} fill sizes="(max-width: 760px) 92vw, 520px" priority={pageNumber === 0} /></div>;
   if (data.kind === "contents") return <div className="paper contents"><small>Annual Chronicle 2025–26</small><h1>{data.continuation ? "Continued" : "Contents"}</h1><section>{data.entries.map((entry) => <div key={entry.number}><b>{String(entry.number).padStart(2, "0")}</b><span>{entry.title}</span><i aria-hidden="true" /><em>{String(entry.page).padStart(2, "0")}</em></div>)}</section><Footer n={pageNumber} /></div>;
+  if (data.kind === "student") {
+    const { student } = data;
+    return <article className={`paper story student-page student-page-${student.language} ${student.format === "poem" ? "student-page-poem" : ""}`} lang={student.language}>
+      <small>Feature · {String(data.serial).padStart(2, "0")} · Student Voice{data.showProfile ? "" : " · Continued"}</small>
+      {data.showProfile ? <div className="student-intro">
+          <div className="student-heading">
+            <h1>{student.title}</h1>
+            <div className="student-byline"><strong>{student.author}</strong><span>{[student.className, student.rollNumber].filter(Boolean).join(" · ")}</span></div>
+          </div>
+          <figure className="student-portrait"><Image src={student.image} alt={`${student.author}, ${student.className}`} fill sizes="(max-width: 700px) 30vw, 150px" /></figure>
+        </div>
+        : <div className="student-running-title"><strong>{student.title}</strong><span>{student.author}</span></div>}
+      <i className="rule" />
+      <section className="copy student-copy">{data.paragraphs.map((paragraph, index) => <p className={student.format === "poem" ? "student-poem-stanza" : paragraph.includes("\n") ? "student-quote" : undefined} key={index}>{paragraph}</p>)}</section>
+      <Footer n={pageNumber} />
+    </article>;
+  }
+  if (data.kind === "mentors") {
+    return <article className="paper story mentor-page">
+      <small>Feature · {String(data.serial).padStart(2, "0")} · Mentors’ Messages</small>
+      {!data.continuation && <><h1>{data.article.title}</h1><i className="rule" /></>}
+      <section className="mentor-list">{data.mentors.map((mentor) => <article className="mentor-card" key={mentor.name}>
+        <figure className="mentor-portrait"><Image src={mentor.image} alt={mentor.name} fill sizes="(max-width: 700px) 25vw, 130px" /></figure>
+        <div className="mentor-copy"><p>{mentor.message}</p><strong>— {mentor.name}</strong></div>
+      </article>)}</section>
+      <Footer n={pageNumber} />
+    </article>;
+  }
   const hasPortraitPair = data.images.length === 2 && data.images.every((src) => portraitImagePaths.has(src));
   const isExhibitionGallery = data.images.length === 3 && data.images.every((src) => src.includes("/exhibition-"));
   const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=><figure key={src} className={src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>;

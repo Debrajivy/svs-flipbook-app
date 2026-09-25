@@ -229,3 +229,50 @@
 .competition-result td span{display:block;white-space:pre-line}
 .competition-result td span+span{margin-top:6px;padding-top:6px;border-top:1px solid #c8d0d9}
 @media(max-width:700px){.competition-result table{font-size:clamp(6.5px,2vw,9px)}.competition-result th,.competition-result td{padding:5px 3px}}
+
+/* Student writing: one portrait and one complete submission per editorial page. */
+.student-page{padding-top:6.5%}
+.student-page>small{margin-bottom:3%}
+.student-intro{display:grid;grid-template-columns:minmax(0,1fr) 29%;gap:6%;align-items:center}
+.student-heading{min-width:0}
+.student-page h1{max-width:none;font-size:clamp(18px,3.25vh,31px);line-height:1.12}
+.student-byline{display:flex;flex-direction:column;align-items:flex-start;margin-top:8%;color:var(--navy);font-family:Arial,Helvetica,sans-serif}
+.student-byline strong{font-size:clamp(9px,1.55vh,13px);letter-spacing:.035em}
+.student-byline span{margin-top:4px;color:var(--orange);font-size:clamp(7px,1.2vh,10px);font-weight:800;text-transform:uppercase;letter-spacing:.13em}
+.student-portrait{position:relative;width:100%;aspect-ratio:4/5;margin:0;overflow:hidden;border:4px solid #fff;border-radius:3px;background:#eef1f4;box-shadow:0 7px 18px rgba(7,28,54,.17)}
+.student-portrait img{object-fit:cover;object-position:center 28%}
+.student-page>.rule{width:36%;margin:3.5% 0}
+.student-running-title{display:flex;align-items:baseline;justify-content:space-between;gap:6%;padding:4% 0 1%;color:var(--navy);font-family:Georgia,'Times New Roman',serif}
+.student-running-title strong{font-size:clamp(18px,3.25vh,31px);font-weight:400;line-height:1.12}
+.student-running-title span{flex:none;color:var(--orange);font-family:Arial,Helvetica,sans-serif;font-size:clamp(7px,1.2vh,10px);font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.student-copy{font-size:clamp(6px,min(1.23vh,2vw),10.5px);line-height:1.34}
+.student-copy p{margin-bottom:1.8%}
+.student-copy .student-quote{padding:1.5% 3%;border-left:2px solid var(--orange);color:var(--navy);white-space:pre-line;font-weight:700;text-align:left}
+.student-page-poem .student-copy{display:flex;flex:1;min-height:0;flex-direction:column;justify-content:center;color:var(--navy);font-size:clamp(8px,min(1.5vh,2.35vw),12px);line-height:1.65}
+.student-poem-stanza{margin:0 0 5%!important;white-space:pre-line;text-align:left}
+.student-poem-stanza:last-child{margin-bottom:0!important}
+.student-page-hi .student-copy{font-family:"Nirmala UI","Mangal",Arial,sans-serif;line-height:1.42}
+.student-page-hi.student-page-poem .student-copy{line-height:1.65}
+.student-page-hi h1,.student-page-hi .student-byline{font-family:"Nirmala UI","Mangal",Arial,sans-serif}
+@media(max-width:700px){
+  .mobile-book .student-page h1{font-size:clamp(15px,4.3vw,23px)}
+  .mobile-book .student-copy{line-height:1.37}
+  .mobile-book .student-page-hi .student-copy{line-height:1.44}
+  .mobile-book .student-page-poem .student-copy{line-height:1.6}
+}
+
+/* Mentor messages: paired editorial cards keep short and long contributions balanced. */
+.mentor-page>small{margin-bottom:3%}
+.mentor-page h1{font-size:clamp(21px,3.7vh,35px)}
+.mentor-page>.rule{width:40%;margin:3% 0 4%}
+.mentor-list{display:flex;flex:1;min-height:0;flex-direction:column;gap:4%}
+.mentor-card{display:grid;flex:1;min-height:0;grid-template-columns:27% minmax(0,1fr);gap:5%;align-items:center;padding:4%;border:1px solid rgba(7,45,100,.12);border-left:3px solid var(--orange);border-radius:3px;background:rgba(255,255,255,.58);box-shadow:0 5px 15px rgba(7,28,54,.06)}
+.mentor-portrait{position:relative;width:100%;aspect-ratio:4/5;margin:0;overflow:hidden;border:3px solid #fff;border-radius:3px;background:#edf1f4;box-shadow:0 5px 13px rgba(7,28,54,.14)}
+.mentor-portrait img{object-fit:cover;object-position:center 22%}
+.mentor-copy{min-width:0;color:#23364e;font-family:Georgia,'Times New Roman',serif}
+.mentor-copy p{margin:0;font-size:clamp(7px,min(1.2vh,1.9vw),10.5px);font-style:italic;line-height:1.45;text-align:left}
+.mentor-copy strong{display:block;margin-top:6%;color:var(--navy);font-family:Arial,Helvetica,sans-serif;font-size:clamp(7px,min(1.25vh,2vw),10.5px);letter-spacing:.035em}
+@media(max-width:700px){
+  .mobile-book .mentor-page h1{font-size:clamp(18px,5vw,26px)}
+  .mobile-book .mentor-card{grid-template-columns:25% minmax(0,1fr);gap:4%;padding:3.5%}
+}
