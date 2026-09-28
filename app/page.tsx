@@ -21,12 +21,17 @@ type StudentSubmission = {
   language: "hi" | "en";
   format?: "article" | "poem";
   pageBreakAfter?: number;
+  compactOnMobile?: boolean;
   paragraphs: string[];
 };
 type MentorMessage = {
   name: string;
   image: string;
   message: string;
+};
+type MediaImage = {
+  src: string;
+  orientation: "portrait" | "landscape";
 };
 /* Legacy contents list retained in source history for reference.
 "Message from the Chairman","Message from the Founder & Director","Message from the Academic Director","Annual Report 2025–26: A Year of Growth & Achievement","A New Beginning: Inauguration of Srijan Valley School","Celebrating the Spirit of Freedom: Independence Day","Unveiling Creativity: Science, Art & Craft Exhibition","Colours of Creativity: Inter-House Rangoli Competition (with Results)","Celebrating Excellence: Prize Distribution Ceremony","Srijan Valley School Shines at the International Library & Cultural Centre (Fancy Dress Event)","Celebrating Childhood: Children’s Day","Caring for Our Children: Medical Health Check-Up Camp","Fancy Dress Fiesta: A Splash of Imagination (with Results)","Speak to Inspire: Speech Competition (with Results)","A Bright Celebration: Yellow Day","The Magic of Christmas: Christmas Celebration","Remembering Swami Vivekananda: National Youth Day","Celebrating Knowledge & Tradition: Basant Panchami","Honouring the Nation: Republic Day Celebration","Nurturing Talents, Celebrating Achievements (Curricular Activities & Results)","Colours on Canvas: Drawing Competition","Exploring Space: Space on Wheels","Discovering the Wonders of Science: Visit to Science City","A Day of Wonder & Laughter: Magic Show","Honouring Excellence: Felicitation Ceremony","Young Minds, Creative Words: Articles & Poems by Our Students","Our Mentors Speak: Teachers’ Messages"];
@@ -106,8 +111,8 @@ const requestedCopy: Record<number, Omit<Article, "title">> = {
   9: { paragraphs: copy[8].paragraphs, resultCaption: "Result of Inter-House Rangoli Making Competition", resultColumns: ["Rank", "House", "Name of Participants"], results: [
     { label: "First", value: "Jasmine", participants: ["Ananya Thakur", "Rishabh Kumar", "Ashwini Kumar"] },
     { label: "Second", value: "Lotus", participants: ["Jiya Kumari", "Nishi Keshri", "Krit Kumar"] },
-    { label: "Third", value: "Rose", participants: ["Aalita Firdous", "Aditya Kumar", "Ayush Keshri"] },
-    { label: "Fourth", value: "Lily", participants: ["Nanis Keshri", "Pari Kumari", "Ayush Kumar Sahu"] },
+    { label: "Third", value: "Rose", participants: ["Aaliya Firdous", "Aditya Kumar", "Ayush Keshri"] },
+    { label: "Fourth", value: "Lily", participants: ["Naincy Keshri", "Pari Kumari", "Ayush Kumar Sahu"] },
   ] },
   10: { paragraphs: copy[9].paragraphs },
   11: { paragraphs: copy[10].paragraphs },
@@ -129,7 +134,19 @@ const requestedCopy: Record<number, Omit<Article, "title">> = {
   22: { paragraphs: copy[22].paragraphs },
   23: { paragraphs: copy[23].paragraphs },
   24: { paragraphs: ["“Education is not only about studies; a child’s mind also needs moments of joy and recreation.”", "After the completion of the Final Examination, Srijan Valley School organised a Magic Show to refresh and entertain the children. A talented magician presented fascinating magic tricks that left the children amazed and delighted.", "The show was not limited to Srijan Valley students; children from other schools also participated and enjoyed the fun-filled event. It was a memorable day of laughter, excitement and recreation, giving the children a much-needed break after their examinations."] },
-  25: { paragraphs: copy[25].paragraphs },
+  25: {
+    paragraphs: copy[25].paragraphs,
+    resultCaption: "Academic Achievers · Session 2025–2026",
+    resultColumns: ["Class", "Name of Toppers"],
+    results: [
+      { label: "Std I", value: "Abhinav Raj" },
+      { label: "Std II", value: "Ankita Kumari" },
+      { label: "Std III", value: "Anshika Priya" },
+      { label: "Std IV", value: "Yash Keshri" },
+      { label: "Std V", value: "Aditya Kumar" },
+      { label: "Std VI", value: "Ananya Thakur" },
+    ],
+  },
 };
 
 const achievementResults: CompetitionResult[] = [
@@ -350,6 +367,7 @@ type PageData =
   | { kind: "story"; article: Article; serial: number; paragraphs: string[]; images: string[]; continuation: boolean; openingPortrait?: boolean; resultsPage?: boolean; competitionResult?: CompetitionResult }
   | { kind: "student"; article: Article; serial: number; student: StudentSubmission; paragraphs: string[]; continuation: boolean; showProfile: boolean }
   | { kind: "mentors"; article: Article; serial: number; mentors: MentorMessage[]; continuation: boolean }
+  | { kind: "media"; images: MediaImage[]; sectionPage: number }
   | { kind: "blank" };
 
 const CONTENTS_PER_PAGE = 9;
@@ -391,6 +409,7 @@ const studentSubmissions: StudentSubmission[] = [
     image: "/assets/student2.jpeg",
     language: "en",
     pageBreakAfter: 4,
+    compactOnMobile: true,
     paragraphs: [
       "Time and tide wait for none. Time is one of the most precious things in our life. We can recover many losses in life, but we can never recover the time that we have lost. Even millions of dollars cannot bring back lost time. Therefore, we should use our time wisely and carefully.",
       "We should invest our time in activities that are useful for our future. As students, it is our duty to utilise our time in such a way that it increases our knowledge and helps us grow academically and personally. Even a small waste of time can sometimes lead to a big loss in life.",
@@ -407,6 +426,7 @@ const studentSubmissions: StudentSubmission[] = [
     className: "कक्षा 7",
     image: "/assets/student3.jpeg",
     language: "hi",
+    compactOnMobile: true,
     paragraphs: [
       "जल केवल पानी नहीं है, जल ही जीवन है। हमारे शरीर में पानी है, खेतों में पानी है, पेड़-पौधों में पानी है और प्रकृति की हर धड़कन में पानी है। यदि जल है, तो जीवन है; यदि जल नहीं है, तो जीवन की कल्पना भी नहीं की जा सकती।",
       "ज़रा सोचिए—अगर एक दिन हमारे घरों में पानी न आए, तो क्या होगा? न नहाना संभव होगा, न खाना बनाना, न सफाई और न ही खेती। और यदि यही स्थिति हमेशा के लिए हो जाए, तो मनुष्य, पशु-पक्षियों और पेड़-पौधों का अस्तित्व ही संकट में पड़ जाएगा।",
@@ -422,6 +442,7 @@ const studentSubmissions: StudentSubmission[] = [
     className: "Class 7",
     image: "/assets/student5.jpeg",
     language: "en",
+    compactOnMobile: true,
     paragraphs: [
       "Learning is one of the most beautiful and exciting parts of life. The joy of learning means feeling happy and curious when we discover something new. Every day gives us a chance to learn something different. We learn from our teachers, parents, friends, books, nature, and our own experiences.",
       "Learning is not only about studying textbooks or getting good marks in examinations. It helps us understand the world, develop new skills, solve problems, and become confident. When we learn something difficult and finally understand it, we feel a great sense of achievement. Even our mistakes can teach us valuable lessons and help us improve.",
@@ -458,17 +479,17 @@ const studentSubmissions: StudentSubmission[] = [
 
 const mentorMessages: MentorMessage[] = [
   {
-    name: "Abhijeet Sir",
+    name: "Abhijeet Kumar",
     image: "/assets/AbhijeetSirPic.jpg.jpeg",
     message: "The beautiful thing about learning is that no one can take it away from you. At Srijan Valley School, we provide the best education to our students so that they can flourish throughout their lives.",
   },
   {
-    name: "Soumya Sir",
+    name: "Soumya Agarwal",
     image: "/assets/SoumyaSirPic.png",
     message: "A teacher is one who shapes the lives of young generations. As teachers, our role is not just to explain the topics given in books, but also to make students aware of how to use things practically in their lives. The true success of any student lies in their knowledge and skills.",
   },
   {
-    name: "Priyanka Devi Ma’am",
+    name: "Priyanka Devi ",
     image: "/assets/PriyankaDeviMaam Pic.jpg.jpeg",
     message: "Srijan Valley School is a wonderful place of learning and growth. Our school provides a positive and friendly environment for students. Teachers guide and support every child with care and dedication. We focus on education, discipline, creativity and good values. Our aim is to help every student become confident, responsible and successful.",
   },
@@ -488,6 +509,38 @@ const mentorMessages: MentorMessage[] = [
     message: "Every small effort takes us one step closer to our dreams. Therefore, we should always believe in ourselves and work hard to achieve our goals.",
   },
 ];
+
+const mediaImages: MediaImage[] = [
+  { src: "/assets/m1.jpeg", orientation: "portrait" },
+  { src: "/assets/m2.jpeg", orientation: "portrait" },
+  { src: "/assets/m3.jpeg", orientation: "portrait" },
+  { src: "/assets/m4.jpeg", orientation: "portrait" },
+  { src: "/assets/m5.jpeg", orientation: "portrait" },
+  { src: "/assets/m6.jpeg", orientation: "landscape" },
+  { src: "/assets/m7.jpeg", orientation: "portrait" },
+  { src: "/assets/m8.jpeg", orientation: "portrait" },
+  { src: "/assets/m9.jpeg", orientation: "portrait" },
+  { src: "/assets/m10.jpeg", orientation: "landscape" },
+  { src: "/assets/m11.jpeg", orientation: "portrait" },
+  { src: "/assets/m12.jpeg", orientation: "portrait" },
+  { src: "/assets/m13.jpeg", orientation: "portrait" },
+  { src: "/assets/m14.jpeg", orientation: "landscape" },
+  { src: "/assets/m15.jpeg", orientation: "landscape" },
+  { src: "/assets/m16.jpeg", orientation: "portrait" },
+  { src: "/assets/m17.jpeg", orientation: "portrait" },
+  { src: "/assets/m18.jpeg", orientation: "landscape" },
+  { src: "/assets/m19.jpeg", orientation: "portrait" },
+  { src: "/assets/m20.jpeg", orientation: "portrait" },
+  { src: "/assets/m21.jpeg", orientation: "portrait" },
+  { src: "/assets/m22.jpeg", orientation: "portrait" },
+  { src: "/assets/m23.jpeg", orientation: "landscape" },
+  { src: "/assets/m24.jpeg", orientation: "portrait" },
+];
+const mediaPages: PageData[] = Array.from({ length: 3 }, (_, sectionPage) => ({
+  kind: "media" as const,
+  images: mediaImages.slice(sectionPage * 8, (sectionPage + 1) * 8),
+  sectionPage,
+}));
 
 function splitParagraphs(paragraphs: string[] = []) {
   if (!paragraphs.length) return [[]];
@@ -546,14 +599,16 @@ const articleChunks = articles.map((article, index) => {
       ...remainingGroups.filter((paragraphs) => paragraphs.length > 0).map((paragraphs) => ({ kind: "story" as const, article, serial: index + 1, paragraphs, images: [], continuation: true })),
     ];
   }
-  const textGroups=splitParagraphs(article.paragraphs);
+  const textGroups=index===24
+    ? [article.paragraphs ?? [], []]
+    : splitParagraphs(article.paragraphs);
   const imageGroups=index===7
     ? exhibitionImageGroups
     : Array.from({length:Math.ceil((article.images?.length??0)/2)},(_,part)=>article.images!.slice(part*2,part*2+2));
   const groups: { paragraphs: string[]; images: string[]; competitionResult?: CompetitionResult; resultsPage?: boolean }[] = article.paragraphs?.length
     ? [...textGroups.map(paragraphs=>({paragraphs,images:[]})),...imageGroups.map(images=>({paragraphs:[],images}))]
     : imageGroups.length?imageGroups.map(images=>({paragraphs:[],images})):[{paragraphs:[],images:[]}];
-  const combineResultsWithFinalText = article.title === "Fancy Dress Fiesta: A Splash of Imagination";
+  const combineResultsWithFinalText = article.title === "Fancy Dress Fiesta: A Splash of Imagination" || index === 24;
   if (article.results?.length) {
     if (combineResultsWithFinalText) groups[textGroups.length - 1].resultsPage = true;
     else groups.splice(textGroups.length, 0, { paragraphs: [], images: [] });
@@ -570,6 +625,7 @@ const bookPages: PageData[] = [
   { kind: "cover", image: "/assets/cover-srijan-valley-school-v4.png", alt: "Srijan Valley School — Where curiosity grows into character" },
   ...Array.from({ length: contentsPageCount }, (_, index) => ({ kind: "contents" as const, entries: contentsEntries.slice(index * CONTENTS_PER_PAGE, (index + 1) * CONTENTS_PER_PAGE), continuation: index > 0 })),
   ...articleChunks.flat(),
+  ...mediaPages,
   { kind: "cover", image: "/assets/img1.jpeg", alt: "Srijan Valley School — Let’s create what comes next" },
 ];
 if (bookPages.length % 2 === 0) bookPages.splice(bookPages.length - 1, 0, { kind: "blank" });
@@ -593,9 +649,22 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   if (!data || data.kind === "blank") return <div className="paper blank-page" />;
   if (data.kind === "cover") return <div className="cover"><Image src={data.image} alt={data.alt} fill sizes="(max-width: 760px) 92vw, 520px" priority={pageNumber === 0} /></div>;
   if (data.kind === "contents") return <div className="paper contents"><small>Annual Chronicle 2025–26</small><h1>{data.continuation ? "Continued" : "Contents"}</h1><section>{data.entries.map((entry) => <div key={entry.number}><b>{String(entry.number).padStart(2, "0")}</b><span>{entry.title}</span><i aria-hidden="true" /><em>{String(entry.page).padStart(2, "0")}</em></div>)}</section><Footer n={pageNumber} /></div>;
+  if (data.kind === "media") return <article className="paper story media-page">
+    <small>Special Feature · In the Press{data.sectionPage > 0 ? " · Continued" : ""}</small>
+    {data.sectionPage === 0 && <><h1>Srijan Valley School in Media…</h1><i className="rule" /></>}
+    <section className={`media-gallery media-gallery-${data.sectionPage + 1}`}>
+      {data.images.map((mediaImage, index) => {
+        const cuttingNumber = data.sectionPage * 8 + index + 1;
+        return <figure className={`media-cutting media-cutting-${mediaImage.orientation}`} key={mediaImage.src}>
+          <Image src={mediaImage.src} alt={`Newspaper cutting ${cuttingNumber} featuring Srijan Valley School`} fill sizes="(max-width: 700px) 42vw, 18vw" />
+        </figure>;
+      })}
+    </section>
+    <Footer n={pageNumber} />
+  </article>;
   if (data.kind === "student") {
     const { student } = data;
-    return <article className={`paper story student-page student-page-${student.language} ${student.format === "poem" ? "student-page-poem" : ""}`} lang={student.language}>
+    return <article className={`paper story student-page student-page-${student.language} ${student.format === "poem" ? "student-page-poem" : ""} ${student.compactOnMobile && data.showProfile ? "student-page-mobile-compact" : ""}`} lang={student.language}>
       <small>Feature · {String(data.serial).padStart(2, "0")} · Student Voice{data.showProfile ? "" : " · Continued"}</small>
       {!data.continuation && <h1 className="student-section-title">{data.article.title}</h1>}
       {data.showProfile ? <div className="student-intro">
@@ -627,7 +696,7 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=><figure key={src} className={src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>;
   const copyBlock = data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}</section>;
   const showResults = data.article.results && data.resultsPage;
-  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
+  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.serial === 25 && !data.resultsPage ? "felicitation-copy-page" : ""} ${data.serial === 25 && data.resultsPage ? "academic-achievers-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
     <small>{data.continuation ? "Continued" : `Feature · ${String(data.serial).padStart(2, "0")}`}</small>
     {!data.continuation && <><h1>{data.article.title}</h1><i className="rule" /></>}
     {data.openingPortrait ? <>{gallery}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}</>}

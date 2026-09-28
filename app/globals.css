@@ -217,6 +217,28 @@
 .results-page .results-table{margin-top:4%;font-size:clamp(9px,1.35vh,11.5px)}
 .results-page .results-table th,.results-page .results-table td{padding:8px 7px}
 .results-page .rangoli-results td span{line-height:1.45}
+.felicitation-copy-page .copy{font-size:clamp(7.2px,1.25vh,10.5px);line-height:1.34}
+.felicitation-copy-page .copy p{margin-bottom:2%}
+.academic-achievers-page .copy{font-size:clamp(7px,1.18vh,10px);line-height:1.32}
+.academic-achievers-page .copy p{margin-bottom:1.5%}
+.academic-achievers-page .results-table{margin:4% 0 3%;border:2px solid var(--navy);border-collapse:separate;border-spacing:0;border-radius:8px;overflow:hidden;font-size:clamp(8px,1.35vh,11px);box-shadow:0 7px 18px rgba(7,45,100,.14)}
+.academic-achievers-page .results-table caption{padding:10px 8px;color:#fff;background:linear-gradient(100deg,var(--navy),#176bb0 68%,var(--orange));font-size:1.05em;letter-spacing:.06em;text-align:center}
+.academic-achievers-page .results-table th{padding:7px;background:#ffd166;color:#072d64;text-align:center}
+.academic-achievers-page .results-table td{padding:7px;text-align:center;font-weight:700}
+.academic-achievers-page .results-table tbody tr:nth-child(1) td{background:#fff1c7}
+.academic-achievers-page .results-table tbody tr:nth-child(2) td{background:#dff4ff}
+.academic-achievers-page .results-table tbody tr:nth-child(3) td{background:#e9e0ff}
+.academic-achievers-page .results-table tbody tr:nth-child(4) td{background:#dff7e8}
+.academic-achievers-page .results-table tbody tr:nth-child(5) td{background:#ffe1eb}
+.academic-achievers-page .results-table tbody tr:nth-child(6) td{background:#fff0dc}
+.academic-achievers-page .results-table tbody td:first-child{color:var(--navy);text-transform:uppercase}
+@media(max-width:700px){
+  .mobile-book .felicitation-copy-page .copy{font-size:clamp(7.4px,2.2vw,9px);line-height:1.3}
+  .mobile-book .academic-achievers-page .copy{font-size:clamp(7.2px,2.15vw,9px);line-height:1.28}
+  .mobile-book .academic-achievers-page .results-table{margin-top:3%;font-size:clamp(7px,2.1vw,8.8px)}
+  .mobile-book .academic-achievers-page .results-table caption{padding:7px 5px}
+  .mobile-book .academic-achievers-page .results-table th,.mobile-book .academic-achievers-page .results-table td{padding:5px 4px}
+}
 .competition-result{min-height:0;color:var(--navy);font-family:Arial,Helvetica,sans-serif}
 .competition-result-meta{display:flex;justify-content:space-between;gap:12px;align-items:baseline;font-size:clamp(8px,1.25vh,11px);font-weight:800;text-transform:uppercase}
 .competition-result-meta span{border-bottom:1px solid currentColor}
@@ -229,6 +251,25 @@
 .competition-result td span{display:block;white-space:pre-line}
 .competition-result td span+span{margin-top:6px;padding-top:6px;border-top:1px solid #c8d0d9}
 @media(max-width:700px){.competition-result table{font-size:clamp(6.5px,2vw,9px)}.competition-result th,.competition-result td{padding:5px 3px}}
+
+/* Newspaper coverage: eight uncropped cuttings per page in an orientation-aware mosaic. */
+.media-page{padding-top:6%}
+.media-page>small{margin-bottom:2%}
+.media-page h1{font-size:clamp(20px,3.5vh,34px)}
+.media-page>.rule{width:42%;margin:2.5% 0 3%}
+.media-gallery{display:grid;flex:1;min-height:0;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(3,minmax(0,1fr));grid-auto-flow:dense;gap:2.2%;padding-bottom:3%}
+.media-gallery-1{grid-template-columns:repeat(3,minmax(0,1fr))}
+.media-cutting{position:relative;min-width:0;min-height:0;margin:0;overflow:hidden;border:3px solid #fff;border-radius:2px;background:#ece8de;box-shadow:0 4px 10px rgba(7,28,54,.16)}
+.media-cutting-landscape{grid-column:span 2}
+.media-cutting img{padding:2px;object-fit:contain;object-position:center}
+@media(max-width:700px){
+  .mobile-book .media-page{padding-top:6.5%}
+  .mobile-book .media-page h1{font-size:clamp(18px,5.4vw,25px)}
+  .mobile-book .media-page>.rule{margin:2% 0 2.5%}
+  .mobile-book .media-gallery{gap:1.7%;padding-bottom:4%}
+  .mobile-book .media-cutting{border-width:2px;box-shadow:0 2px 6px rgba(7,28,54,.14)}
+  .mobile-book .media-cutting img{padding:1px}
+}
 
 /* Student writing: one portrait and one complete submission per editorial page. */
 .student-page{padding-top:6.5%}
@@ -260,6 +301,14 @@
   .mobile-book .student-copy{line-height:1.37}
   .mobile-book .student-page-hi .student-copy{line-height:1.44}
   .mobile-book .student-page-poem .student-copy{line-height:1.6}
+  .mobile-book .student-page-mobile-compact>small{margin-bottom:2%}
+  .mobile-book .student-page-mobile-compact .student-intro{grid-template-columns:minmax(0,1fr) 24%;gap:4%}
+  .mobile-book .student-page-mobile-compact h1{font-size:clamp(14px,3.9vw,20px)}
+  .mobile-book .student-page-mobile-compact .student-byline{margin-top:4%}
+  .mobile-book .student-page-mobile-compact>.rule{margin:2.25% 0}
+  .mobile-book .student-page-mobile-compact .student-copy{font-size:clamp(7.2px,2vw,8.5px);line-height:1.3}
+  .mobile-book .student-page-mobile-compact.student-page-hi .student-copy{line-height:1.34}
+  .mobile-book .student-page-mobile-compact .student-copy p{margin-bottom:1.25%}
 }
 
 /* Mentor messages: paired editorial cards keep short and long contributions balanced. */
