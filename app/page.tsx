@@ -22,6 +22,7 @@ type StudentSubmission = {
   format?: "article" | "poem";
   pageBreakAfter?: number;
   compactOnMobile?: boolean;
+  hideContinuationTitle?: boolean;
   paragraphs: string[];
 };
 type MentorMessage = {
@@ -267,7 +268,7 @@ const articleImages: Record<number,string[]> = {
   ],
   15:[
     "/assets/annual-report/yellow-01.jpg","/assets/annual-report/yellow-02.jpg",
-    "/assets/annual-report/yellow-03.jpg","/assets/annual-report/yellow-04.jpg",
+    "/assets/annual-report/yellow-03.jpg",
     "/assets/annual-report/yellow-05.jpg","/assets/annual-report/yellow-06.jpg",
     "/assets/annual-report/yellow-07.jpg",
   ],
@@ -352,7 +353,7 @@ const portraitImagePaths = new Set([
   "/assets/annual-report/exhibition-02.jpg", "/assets/annual-report/exhibition-03.jpg", "/assets/annual-report/exhibition-05.jpg",
   "/assets/annual-report/speech-01.jpg", "/assets/annual-report/speech-02.jpg", "/assets/annual-report/speech-03.jpg", "/assets/annual-report/speech-04.jpg",
   "/assets/annual-report/speech-05.jpg", "/assets/annual-report/speech-06.jpg", "/assets/annual-report/yellow-01.jpg", "/assets/annual-report/yellow-02.jpg",
-  "/assets/annual-report/yellow-03.jpg", "/assets/annual-report/yellow-04.jpg",
+  "/assets/annual-report/yellow-03.jpg",
 ]);
 const articles: Article[] = titles.map((title, i) => ({
   title,
@@ -475,6 +476,26 @@ const studentSubmissions: StudentSubmission[] = [
       "The first step is always trying—it does not matter if we fail, as long as we learn from our mistakes. The second step is following guidelines and discipline in our lifestyle and being firm about it. The third step is having a strong mindset and surrounding ourselves with positive people. Last but not least, we should never give up on anything. We should try to find happiness in the small events and achievements of our life. One day, we will know that the secret behind every success is always hidden in our positive thinking.",
     ],
   },
+  {
+    title: "My School, My Pride",
+    author: "Ananya Thakur",
+    className: "Class 7",
+    image: "/assets/Ananya.jpeg",
+    language: "en",
+    pageBreakAfter: 5,
+    compactOnMobile: true,
+    hideContinuationTitle: true,
+    paragraphs: [
+      "My school, Srijan Valley School, is not just a place where I study; it is a place where I learn, grow and dream. I feel proud to be a student of my school. Every day, I come to school with enthusiasm because there is always something new and interesting to learn.",
+      "Srijan Valley School provides us with a positive and friendly environment. Our teachers are caring, dedicated and always ready to guide us. They encourage us to ask questions, think creatively and develop confidence in ourselves. They teach us not only from books but also important values such as discipline, honesty, kindness, respect and responsibility.",
+      "Our school gives importance to both academics and co-curricular activities. We participate in sports, art, music, competitions, celebrations and various educational activities. These experiences help us discover our talents and develop teamwork and leadership skills. Our school also encourages us to speak confidently in English, express our thoughts and become good communicators.",
+      "I especially love the special morning activities and the opportunities we get to discuss current events and learn about the world around us. Our library, computer and science facilities make learning more interesting and practical.",
+      "What makes me most proud is that Srijan Valley School teaches us to become good human beings. We are taught to respect our elders, help others and contribute positively to society.",
+      "I believe that a school is like a second home, and Srijan Valley School is truly my second home. I feel proud when I wear my school uniform and say, “I am a student of Srijan Valley School.”",
+      "My school has given me knowledge, confidence, friendships and beautiful memories. I will always cherish these moments and do my best to make my school proud.",
+      "Srijan Valley School is my school, my second home and my pride!",
+    ],
+  },
 ];
 
 const mentorMessages: MentorMessage[] = [
@@ -518,7 +539,7 @@ const mediaImages: MediaImage[] = [
   { src: "/assets/m5.jpeg", orientation: "portrait" },
   { src: "/assets/m6.jpeg", orientation: "landscape" },
   { src: "/assets/m7.jpeg", orientation: "portrait" },
-  { src: "/assets/m8.jpeg", orientation: "portrait" },
+  { src: "/assets/m17.jpeg", orientation: "portrait" },
   { src: "/assets/m9.jpeg", orientation: "portrait" },
   { src: "/assets/m10.jpeg", orientation: "landscape" },
   { src: "/assets/m11.jpeg", orientation: "portrait" },
@@ -527,16 +548,8 @@ const mediaImages: MediaImage[] = [
   { src: "/assets/m14.jpeg", orientation: "landscape" },
   { src: "/assets/m15.jpeg", orientation: "landscape" },
   { src: "/assets/m16.jpeg", orientation: "portrait" },
-  { src: "/assets/m17.jpeg", orientation: "portrait" },
-  { src: "/assets/m18.jpeg", orientation: "landscape" },
-  { src: "/assets/m19.jpeg", orientation: "portrait" },
-  { src: "/assets/m20.jpeg", orientation: "portrait" },
-  { src: "/assets/m21.jpeg", orientation: "portrait" },
-  { src: "/assets/m22.jpeg", orientation: "portrait" },
-  { src: "/assets/m23.jpeg", orientation: "landscape" },
-  { src: "/assets/m24.jpeg", orientation: "portrait" },
 ];
-const mediaPages: PageData[] = Array.from({ length: 3 }, (_, sectionPage) => ({
+const mediaPages: PageData[] = Array.from({ length: 2 }, (_, sectionPage) => ({
   kind: "media" as const,
   images: mediaImages.slice(sectionPage * 8, (sectionPage + 1) * 8),
   sectionPage,
@@ -604,7 +617,9 @@ const articleChunks = articles.map((article, index) => {
     : splitParagraphs(article.paragraphs);
   const imageGroups=index===7
     ? exhibitionImageGroups
-    : Array.from({length:Math.ceil((article.images?.length??0)/2)},(_,part)=>article.images!.slice(part*2,part*2+2));
+    : index===15
+      ? [article.images!.slice(0,2),article.images!.slice(2,3),article.images!.slice(3,5),article.images!.slice(5)]
+      : Array.from({length:Math.ceil((article.images?.length??0)/2)},(_,part)=>article.images!.slice(part*2,part*2+2));
   const groups: { paragraphs: string[]; images: string[]; competitionResult?: CompetitionResult; resultsPage?: boolean }[] = article.paragraphs?.length
     ? [...textGroups.map(paragraphs=>({paragraphs,images:[]})),...imageGroups.map(images=>({paragraphs:[],images}))]
     : imageGroups.length?imageGroups.map(images=>({paragraphs:[],images})):[{paragraphs:[],images:[]}];
@@ -674,7 +689,7 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
           </div>
           <figure className="student-portrait"><Image src={student.image} alt={`${student.author}, ${student.className}`} fill sizes="(max-width: 700px) 30vw, 150px" /></figure>
         </div>
-        : <div className="student-running-title"><strong>{student.title}</strong><span>{student.author}</span></div>}
+        : !student.hideContinuationTitle && <div className="student-running-title"><strong>{student.title}</strong><span>{student.author}</span></div>}
       <i className="rule" />
       <section className="copy student-copy">{data.paragraphs.map((paragraph, index) => <p className={student.format === "poem" ? "student-poem-stanza" : paragraph.includes("\n") ? "student-quote" : undefined} key={index}>{paragraph}</p>)}</section>
       <Footer n={pageNumber} />
@@ -693,7 +708,11 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   }
   const hasPortraitPair = data.images.length === 2 && data.images.every((src) => portraitImagePaths.has(src));
   const isExhibitionGallery = data.images.length === 3 && data.images.every((src) => src.includes("/exhibition-"));
-  const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=><figure key={src} className={src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>)}</section>;
+  const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=>{
+    const isCenteredPortrait = pageNumber === 59 && data.images.length === 1 && portraitImagePaths.has(src);
+    const frameClass = isCenteredPortrait ? "centered-portrait-frame" : src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined;
+    return <figure key={src} className={frameClass}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>;
+  })}</section>;
   const copyBlock = data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}</section>;
   const showResults = data.article.results && data.resultsPage;
   return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.serial === 25 && !data.resultsPage ? "felicitation-copy-page" : ""} ${data.serial === 25 && data.resultsPage ? "academic-achievers-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
