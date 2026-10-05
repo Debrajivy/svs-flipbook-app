@@ -184,7 +184,7 @@ const achievementResults: CompetitionResult[] = [
     rows: [
       { group: "Std I", winners: [["Abhinav Raj"]] },
       { group: "Std II", winners: [["Ayush Kuiry"]] },
-      { group: "Std III", winners: [["Parween Kumar"]] },
+      { group: "Std III", winners: [["Praveen Kumar"]] },
       { group: "Std IV", winners: [["Yash Keshri"]] },
       { group: "Std V", winners: [["Pari Kumari"]] },
       { group: "Std VI", winners: [["Ayush Kumar Sahu"]] },
@@ -469,7 +469,7 @@ const studentSubmissions: StudentSubmission[] = [
     author: "Aradhya Kumari Sahu",
     className: "Class VI",
     rollNumber: "Roll No. 11",
-    image: "/assets/AradhyaKumariSahu.jpg.jpeg",
+    image: "/assets/Aradhya.jpeg",
     language: "en",
     paragraphs: [
       "Life is full of mysteries. Sometimes it is all about happiness, and at other times we face a lot of struggles. So the question arises: what should we do in both situations, and how do we balance everything when life is on a rollercoaster? The answer is positive thinking. When everything is fine and we are winning in life, we should be humble and thankful, and show gratitude to others. When our life hits rock bottom, we should follow the same process, adding a little extra hard work to achieve the life we want.",
@@ -505,7 +505,7 @@ const mentorMessages: MentorMessage[] = [
     message: "The beautiful thing about learning is that no one can take it away from you. At Srijan Valley School, we provide the best education to our students so that they can flourish throughout their lives.",
   },
   {
-    name: "Soumya Agarwal",
+    name: "Soumya Garg",
     image: "/assets/SoumyaSirPic.png",
     message: "A teacher is one who shapes the lives of young generations. As teachers, our role is not just to explain the topics given in books, but also to make students aware of how to use things practically in their lives. The true success of any student lies in their knowledge and skills.",
   },
@@ -528,6 +528,11 @@ const mentorMessages: MentorMessage[] = [
     name: "Eni Guria",
     image: "/assets/EniGuriaPic.jpg.jpeg",
     message: "Every small effort takes us one step closer to our dreams. Therefore, we should always believe in ourselves and work hard to achieve our goals.",
+  },
+  {
+    name: "Subhanshu Ray",
+    image: "/assets/Subhanshu.jpeg",
+    message: "Education is not just about reading books, it is about learning how to live. Without education, life is like a boat without a sail.",
   },
 ];
 
