@@ -332,13 +332,29 @@ const requestedArticleImages: Record<number, string[]> = {
   13: articleImages[12].filter((src) => !["/assets/annual-report/medical-05.jpg", "/assets/annual-report/medical-06.jpg"].includes(src)),
   14: articleImages[13],
   15: articleImages[14],
-  16: articleImages[15],
-  17: articleImages[16],
+  16: [
+    "/assets/p58.jpeg",
+    "/assets/p59.jpeg",
+    "/assets/p60.jpeg",
+    "/assets/p60p.jpeg",
+    "/assets/p61.jpeg",
+  ],
+  17: [
+    ...articleImages[16].slice(0, 2),
+    "/assets/p64.jpeg",
+    ...articleImages[16].slice(4),
+  ],
   18: articleImages[17],
   19: articleImages[18],
   20: articleImages[19],
-  22: articleImages[22],
-  23: articleImages[23],
+  22: [...articleImages[22].slice(0, 4), "/assets/p84.jpeg"],
+  23: [
+    "/assets/p86.jpeg",
+    "/assets/p86p.jpeg",
+    "/assets/p87.jpeg",
+    "/assets/p87p.jpeg",
+    "/assets/p88.jpeg",
+  ],
   24: articleImages[24],
   25: articleImages[25],
 };
@@ -353,7 +369,7 @@ const portraitImagePaths = new Set([
   "/assets/annual-report/exhibition-02.jpg", "/assets/annual-report/exhibition-03.jpg", "/assets/annual-report/exhibition-05.jpg",
   "/assets/annual-report/speech-01.jpg", "/assets/annual-report/speech-02.jpg", "/assets/annual-report/speech-03.jpg", "/assets/annual-report/speech-04.jpg",
   "/assets/annual-report/speech-05.jpg", "/assets/annual-report/speech-06.jpg", "/assets/annual-report/yellow-01.jpg", "/assets/annual-report/yellow-02.jpg",
-  "/assets/annual-report/yellow-03.jpg",
+  "/assets/annual-report/yellow-03.jpg", "/assets/p58.jpeg", "/assets/p59.jpeg",
 ]);
 const articles: Article[] = titles.map((title, i) => ({
   title,
@@ -623,7 +639,9 @@ const articleChunks = articles.map((article, index) => {
   const imageGroups=index===7
     ? exhibitionImageGroups
     : index===15
-      ? [article.images!.slice(0,2),article.images!.slice(2,3),article.images!.slice(3,5),article.images!.slice(5)]
+      ? [article.images!.slice(0,1),article.images!.slice(1,2),article.images!.slice(2,4),article.images!.slice(4)]
+      : index===16
+        ? [article.images!.slice(0,2),article.images!.slice(2,3),article.images!.slice(3)]
       : Array.from({length:Math.ceil((article.images?.length??0)/2)},(_,part)=>article.images!.slice(part*2,part*2+2));
   const groups: { paragraphs: string[]; images: string[]; competitionResult?: CompetitionResult; resultsPage?: boolean }[] = article.paragraphs?.length
     ? [...textGroups.map(paragraphs=>({paragraphs,images:[]})),...imageGroups.map(images=>({paragraphs:[],images}))]
@@ -714,7 +732,7 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
   const hasPortraitPair = data.images.length === 2 && data.images.every((src) => portraitImagePaths.has(src));
   const isExhibitionGallery = data.images.length === 3 && data.images.every((src) => src.includes("/exhibition-"));
   const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=>{
-    const isCenteredPortrait = pageNumber === 59 && data.images.length === 1 && portraitImagePaths.has(src);
+    const isCenteredPortrait = (pageNumber === 58 || pageNumber === 59) && data.images.length === 1 && portraitImagePaths.has(src);
     const frameClass = isCenteredPortrait ? "centered-portrait-frame" : src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined;
     return <figure key={src} className={frameClass}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>;
   })}</section>;
