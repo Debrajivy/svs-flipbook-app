@@ -34,6 +34,119 @@ type MediaImage = {
   src: string;
   orientation: "portrait" | "landscape";
 };
+const photoCaptions: Record<number, string[]> = {
+  16: [
+    "The Day Our Educational Journey Began",
+    "School dignitaries and guests come together to celebrate the beginning of a new journey.",
+  ],
+  17: [
+    "The school fraternity and distinguished guests gathered to celebrate this memorable occasion.",
+    "A Glimpse of the Beginning of Something Great",
+  ],
+  19: [
+    "A proud gathering of young citizens celebrating the spirit of Independence.",
+    "The National Flag is hoisted with pride, honouring the spirit of freedom and patriotism.",
+  ],
+  20: [
+    "United in pride, service and patriotism.",
+    "An inspiring moment of unity and patriotism with the National Flag flying high.",
+  ],
+  21: [
+    "Flag Hoisting Ceremony: A tribute to the nation and its journey of freedom.",
+    "Our school under the proud colours of the Indian Tricolour.",
+  ],
+  22: ["Where young minds learn, grow and carry the spirit of the nation forward."],
+  24: [
+    "A moment of encouragement as the chief guest explores the students' creative exhibits.",
+    "Learning by creating: A student proudly displays his model.",
+    "Art inspired by nature, created with imagination and care.",
+  ],
+  25: [
+    "A proud gathering showcasing his spirit of learning, creativity and collaboration.",
+    "Parents explore the imaginative creations of their children.",
+    "Scientific curiosity, creativity and hands-on learning.",
+  ],
+  28: [
+    "A beautiful blend of creativity, teamwork and tradition.",
+    "Together, they transform colours and patterns into a beautiful work of art.",
+  ],
+  29: [
+    "Different design, same spirit of creativity and collaboration.",
+    "Teamwork in action: students creating their colourful masterpiece.",
+  ],
+  30: [
+    "A colourful celebration of teamwork, patience and artistic talent.",
+    "A proud moment with the Principal celebrating the creativity of our young participants.",
+  ],
+  31: ["A memorable moment from the group-wise rangoli making competition."],
+  34: [
+    "Celebrating excellence and achievement as our students receive their well-deserved recognition.",
+    "A moment of pride as the Directors honour the achievements of our students.",
+  ],
+  35: [
+    "Recognition today, inspiration for tomorrow.",
+    "The joy of achievement shines brightly as students are felicitated for their accomplishments.",
+  ],
+  36: [
+    "Cherishing the smiles and success of our young achievers.",
+    "Celebrating students whose dedication has turned efforts into achievements.",
+  ],
+  38: [
+    "A Proud Moment for Our Young Stars. Participation certificates were awarded to our young learners, recognising their creativity, confidence, and enthusiastic participation.",
+    "Little stars, proud moments!",
+  ],
+  39: [
+    "Dressed to Impress, Ready to Inspire. The young participants brought their characters to life with colourful costumes, confidence, and wonderful expressions, making the competition a memorable experience.",
+    "A dress to inspire and grow",
+  ],
+  40: [
+    "Little Performers, Big Dreams. The enthusiastic participation of our junior students reflected their confidence, creativity, and joy of learning beyond the classroom.",
+  ],
+  42: [
+    "Remembering Chacha Nehru: Our teachers pay a heartfelt tribute to Pandit Jawaharlal Nehru.",
+    "Remembering Chacha Nehru: Our teachers pay a heartfelt tribute to Pandit Jawaharlal Nehru.",
+  ],
+  43: [
+    "Celebrating the Joy of Childhood",
+    "A Tribute to a Great Leader and Friend of Children",
+  ],
+  45: [
+    "Healthy Students, Stronger School Community",
+    "Young Minds, Healthy Futures: Our students actively participated in the health check-up camp, fostering awareness, responsibility, and a lifelong commitment to well-being.",
+  ],
+  46: [
+    "Together for Health, Together for a Better Tomorrow",
+    "A Leader with a Commitment to Health",
+  ],
+  47: [
+    "Leading the Way Towards Wellness: Our Esteemed Directors participate in the school health check-up camp, inspiring everyone to prioritise health and well-being.",
+    "Care Check-Up and Commitment to Health.",
+  ],
+  50: [
+    "Dress for a Cause, Walk for a Better Tomorrow!",
+    "Honouring a cherished presence!",
+  ],
+};
+const galleryCaptions: Record<number, string> = {
+  90: "A day filled with wonder, excitement, and a little bit of magic! Let the magic begin!",
+  91: "A little magic, lots of laughter, and endless goodies!",
+  94: "Honouring excellence, celebrating success, and inspiring young achievers!",
+  95: "A proud moment to celebrate the achievements and applaud our talented students!",
+  96: "Dream. Work hard. Achieve. Celebrate!",
+  97: "Today’s achievers are tomorrow’s inspirations!",
+};
+const pageImageSets: Record<number, string[]> = {
+  21: ["/assets/p21.jpeg"],
+  22: ["/assets/p22.jpeg"],
+  24: ["/assets/p24-1.jpeg", "/assets/p24-2.jpeg"],
+  34: ["/assets/p34-1.jpeg", "/assets/p34-2.jpeg"],
+};
+const pageImageReplacements: Record<number, Record<number, string>> = {
+  25: {
+    1: "/assets/p25-2.jpeg",
+    2: "/assets/p25-3.jpeg",
+  },
+};
 /* Legacy contents list retained in source history for reference.
 "Message from the Chairman","Message from the Founder & Director","Message from the Academic Director","Annual Report 2025–26: A Year of Growth & Achievement","A New Beginning: Inauguration of Srijan Valley School","Celebrating the Spirit of Freedom: Independence Day","Unveiling Creativity: Science, Art & Craft Exhibition","Colours of Creativity: Inter-House Rangoli Competition (with Results)","Celebrating Excellence: Prize Distribution Ceremony","Srijan Valley School Shines at the International Library & Cultural Centre (Fancy Dress Event)","Celebrating Childhood: Children’s Day","Caring for Our Children: Medical Health Check-Up Camp","Fancy Dress Fiesta: A Splash of Imagination (with Results)","Speak to Inspire: Speech Competition (with Results)","A Bright Celebration: Yellow Day","The Magic of Christmas: Christmas Celebration","Remembering Swami Vivekananda: National Youth Day","Celebrating Knowledge & Tradition: Basant Panchami","Honouring the Nation: Republic Day Celebration","Nurturing Talents, Celebrating Achievements (Curricular Activities & Results)","Colours on Canvas: Drawing Competition","Exploring Space: Space on Wheels","Discovering the Wonders of Science: Visit to Science City","A Day of Wonder & Laughter: Magic Show","Honouring Excellence: Felicitation Ceremony","Young Minds, Creative Words: Articles & Poems by Our Students","Our Mentors Speak: Teachers’ Messages"];
 */
@@ -369,7 +482,7 @@ const portraitImagePaths = new Set([
   "/assets/annual-report/exhibition-02.jpg", "/assets/annual-report/exhibition-03.jpg", "/assets/annual-report/exhibition-05.jpg",
   "/assets/annual-report/speech-01.jpg", "/assets/annual-report/speech-02.jpg", "/assets/annual-report/speech-03.jpg", "/assets/annual-report/speech-04.jpg",
   "/assets/annual-report/speech-05.jpg", "/assets/annual-report/speech-06.jpg", "/assets/annual-report/yellow-01.jpg", "/assets/annual-report/yellow-02.jpg",
-  "/assets/annual-report/yellow-03.jpg", "/assets/p58.jpeg", "/assets/p59.jpeg",
+  "/assets/annual-report/yellow-03.jpg", "/assets/p24-1.jpeg", "/assets/p24-2.jpeg", "/assets/p25-2.jpeg", "/assets/p58.jpeg", "/assets/p59.jpeg",
 ]);
 const articles: Article[] = titles.map((title, i) => ({
   title,
@@ -552,30 +665,6 @@ const mentorMessages: MentorMessage[] = [
   },
 ];
 
-const mediaImages: MediaImage[] = [
-  { src: "/assets/m1.jpeg", orientation: "portrait" },
-  { src: "/assets/m2.jpeg", orientation: "portrait" },
-  { src: "/assets/m3.jpeg", orientation: "portrait" },
-  { src: "/assets/m4.jpeg", orientation: "portrait" },
-  { src: "/assets/m5.jpeg", orientation: "portrait" },
-  { src: "/assets/m6.jpeg", orientation: "landscape" },
-  { src: "/assets/m7.jpeg", orientation: "portrait" },
-  { src: "/assets/m17.jpeg", orientation: "portrait" },
-  { src: "/assets/m9.jpeg", orientation: "portrait" },
-  { src: "/assets/m10.jpeg", orientation: "landscape" },
-  { src: "/assets/m11.jpeg", orientation: "portrait" },
-  { src: "/assets/m12.jpeg", orientation: "portrait" },
-  { src: "/assets/m13.jpeg", orientation: "portrait" },
-  { src: "/assets/m14.jpeg", orientation: "landscape" },
-  { src: "/assets/m15.jpeg", orientation: "landscape" },
-  { src: "/assets/m16.jpeg", orientation: "portrait" },
-];
-const mediaPages: PageData[] = Array.from({ length: 2 }, (_, sectionPage) => ({
-  kind: "media" as const,
-  images: mediaImages.slice(sectionPage * 8, (sectionPage + 1) * 8),
-  sectionPage,
-}));
-
 function splitParagraphs(paragraphs: string[] = []) {
   if (!paragraphs.length) return [[]];
   const groups: string[][] = [];
@@ -663,7 +752,6 @@ const bookPages: PageData[] = [
   { kind: "cover", image: "/assets/cover-srijan-valley-school-v4.png", alt: "Srijan Valley School — Where curiosity grows into character" },
   ...Array.from({ length: contentsPageCount }, (_, index) => ({ kind: "contents" as const, entries: contentsEntries.slice(index * CONTENTS_PER_PAGE, (index + 1) * CONTENTS_PER_PAGE), continuation: index > 0 })),
   ...articleChunks.flat(),
-  ...mediaPages,
   { kind: "cover", image: "/assets/img1.jpeg", alt: "Srijan Valley School — Let’s create what comes next" },
 ];
 if (bookPages.length % 2 === 0) bookPages.splice(bookPages.length - 1, 0, { kind: "blank" });
@@ -729,19 +817,22 @@ function PageSheet({ data, pageNumber }: { data?: PageData; pageNumber: number }
       <Footer n={pageNumber} />
     </article>;
   }
-  const hasPortraitPair = data.images.length === 2 && data.images.every((src) => portraitImagePaths.has(src));
-  const isExhibitionGallery = data.images.length === 3 && data.images.every((src) => src.includes("/exhibition-"));
-  const gallery = data.images.length > 0 && <section className={`story-gallery gallery-${data.images.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{data.images.map((src,index)=>{
-    const isCenteredPortrait = (pageNumber === 58 || pageNumber === 59) && data.images.length === 1 && portraitImagePaths.has(src);
+  const pageImages = (pageImageSets[pageNumber] ?? data.images).map((src, index) => pageImageReplacements[pageNumber]?.[index] ?? src);
+  const hasPortraitPair = pageImages.length === 2 && pageImages.every((src) => portraitImagePaths.has(src));
+  const isExhibitionGallery = pageImages.length === 3 && (pageNumber === 25 || pageImages.every((src) => src.includes("/exhibition-")));
+  const gallery = pageImages.length > 0 && <section className={`story-gallery gallery-${pageImages.length} ${hasPortraitPair ? "side-by-side-portraits" : ""} ${isExhibitionGallery ? "exhibition-gallery" : ""}`}>{pageImages.map((src,index)=>{
+    const isCenteredPortrait = (pageNumber === 58 || pageNumber === 59) && pageImages.length === 1 && portraitImagePaths.has(src);
     const frameClass = isCenteredPortrait ? "centered-portrait-frame" : src.endsWith("inauguration-cc.jpg") ? "portrait-frame" : isExhibitionGallery && portraitImagePaths.has(src) ? "exhibition-portrait-frame" : undefined;
-    return <figure key={src} className={frameClass}><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></figure>;
+    const caption = photoCaptions[pageNumber]?.[index];
+    return <figure key={src} className={frameClass}><div className="story-photo"><Image src={src} alt={`${data.article.title} — photograph ${index+1}`} fill sizes="(max-width: 700px) 84vw, 38vw" /></div>{caption && <figcaption>{caption}</figcaption>}</figure>;
   })}</section>;
   const copyBlock = data.paragraphs.length > 0 && <section className="copy">{data.paragraphs.map((paragraph, index) => <p className={paragraph.includes("\n")?"signature":undefined} key={index}>{paragraph}</p>)}</section>;
+  const galleryCaption = galleryCaptions[pageNumber] && <p className="gallery-caption">{galleryCaptions[pageNumber]}</p>;
   const showResults = data.article.results && data.resultsPage;
-  return <div className={`paper story ${data.paragraphs.length||data.images.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${data.images.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.serial === 25 && !data.resultsPage ? "felicitation-copy-page" : ""} ${data.serial === 25 && data.resultsPage ? "academic-achievers-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
+  return <div className={`paper story ${data.paragraphs.length||pageImages.length||data.resultsPage||data.competitionResult ? "" : "empty"} ${pageImages.length===1?"portrait-story":""} ${data.openingPortrait ? "opening-portrait" : ""} ${data.resultsPage ? "results-page" : ""} ${data.serial === 25 && !data.resultsPage ? "felicitation-copy-page" : ""} ${data.serial === 25 && data.resultsPage ? "academic-achievers-page" : ""} ${data.competitionResult ? "competition-page" : ""} ${galleryCaption ? "has-gallery-caption" : ""} ${data.openingPortrait && (data.serial === 3 || data.serial === 4) ? "portrait-square" : ""}`}>
     <small>{data.continuation ? "Continued" : `Feature · ${String(data.serial).padStart(2, "0")}`}</small>
     {!data.continuation && <><h1>{data.article.title}</h1><i className="rule" /></>}
-    {data.openingPortrait ? <>{gallery}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}</>}
+    {data.openingPortrait ? <>{gallery}{galleryCaption}{copyBlock}</> : <>{copyBlock}{showResults && <ResultsTable rows={data.article.results!} columns={data.article.resultColumns} caption={data.article.resultCaption} />}{data.competitionResult && <CompetitionResultTable result={data.competitionResult} />}{gallery}{galleryCaption}</>}
     <Footer n={pageNumber} />
   </div>;
 }
